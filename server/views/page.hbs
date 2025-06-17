@@ -1,0 +1,105 @@
+<!-- Main Content -->
+<main class="main">
+  {{#if showBreadcrumbs}}
+    <!-- Breadcrumbs -->
+    <section class="breadcrumbs">
+      <div class="breadcrumbs__container">
+        <nav class="breadcrumbs__nav">
+          <a href="/" class="breadcrumbs__link">Home</a>
+          {{#each breadcrumbs}}
+            <span class="breadcrumbs__separator">/</span>
+            {{#if url}}
+              <a href="{{url}}" class="breadcrumbs__link">{{title}}</a>
+            {{else}}
+              <span class="breadcrumbs__current">{{title}}</span>
+            {{/if}}
+          {{/each}}
+        </nav>
+      </div>
+    </section>
+  {{/if}}
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="page-header__container">
+      <h1 class="page-header__title">{{pageTitle}}</h1>
+      {{#if pageSubtitle}}
+        <p class="page-header__subtitle">{{pageSubtitle}}</p>
+      {{/if}}
+    </div>
+  </section>
+
+  <!-- Page Content -->
+  <section class="page-content">
+    <div class="page-content__container">
+      <div class="page-content__body">
+        {{#if isAboutPage}}
+          <section class="about-story">
+            <h2>Our Story</h2>
+            <p>ShineCraft has been at the forefront of luxury jewelry design for
+              over 25 years. Our journey began in 1995 with a small workshop and
+              a big dream — to bring timeless elegance to every customer. Today,
+              ShineCraft is a symbol of quality, innovation, and exquisite
+              craftsmanship.</p>
+          </section>
+          <section class="about-advantages">
+            <h2>Why Choose Us?</h2>
+            <ul>
+              <li>Exclusive designs and limited collections</li>
+              <li>Certified gemstones and precious metals</li>
+              <li>Lifetime warranty on select items</li>
+              <li>Personalized service and custom orders</li>
+            </ul>
+          </section>
+          <section class="about-team">
+            <h2>Our Team</h2>
+            <p>Our team consists of experienced jewelers, designers, and
+              consultants who are passionate about their craft and dedicated to
+              exceeding your expectations.</p>
+          </section>
+        {{/if}}
+        {{#if isContactsPage}}
+          <section class="contacts-map">
+            <h2>Our Location</h2>
+            <div class="map-embed">
+              <!-- Здесь может быть iframe карты, например Яндекс или Google -->
+              <iframe
+                src="https://yandex.ru/map-widget/v1/?um=constructor%3Aexample"
+                width="100%"
+                height="300"
+                frameborder="0"
+              ></iframe>
+            </div>
+          </section>
+          <section class="contacts-details">
+            <h2>Contact Information</h2>
+            <ul>
+              <li><strong>Address:</strong>
+                123 Jewelry Avenue, Moscow, Russia 101000</li>
+              <li><strong>Phone:</strong> +7 (495) 123-45-67</li>
+              <li><strong>Email:</strong> info@jewelry-store.ru</li>
+            </ul>
+          </section>
+          <section class="contacts-feedback">
+            <h2>Feedback Form</h2>
+            <form class="feedback-form">
+              <input type="text" name="name" placeholder="Your Name" required />
+              <input
+                type="email"
+                name="email"
+                placeholder="Your Email"
+                required
+              />
+              <textarea
+                name="message"
+                placeholder="Your Message"
+                required
+              ></textarea>
+              <button type="submit" class="button button--primary">Send</button>
+            </form>
+          </section>
+        {{/if}}
+      </div>
+    </div>
+  </section>
+</main>

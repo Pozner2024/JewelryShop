@@ -1,0 +1,107 @@
+<!-- Auth Modals -->
+<!-- Login Modal -->
+<div id="loginModal" class="modal">
+  <div class="modal__content">
+    <div class="modal__header">
+      <h2 class="modal__title">Login</h2>
+      <button class="modal__close" id="closeLoginModal">&times;</button>
+    </div>
+    <form id="loginForm" class="modal__form">
+      <div class="form-group">
+        <label class="form-label">E-mail:</label>
+        <input type="email" name="email" class="form-input" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password:</label>
+        <div class="password-container">
+          <input
+            type="password"
+            name="password"
+            class="form-input"
+            pattern="[0-9]{8}"
+            required
+          />
+          <span class="password-toggle" id="loginPasswordToggle">👁️</span>
+        </div>
+        <small class="form-hint">Password must contain 8 digits</small>
+      </div>
+      <button type="submit" class="button button--primary button--full">
+        Login
+      </button>
+      <div id="loginStatusMessage" class="status-message"></div>
+    </form>
+    <div class="modal__footer">
+      <p>
+        Don't have an account?
+        <a href="#" id="showRegisterModal">Sign Up</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Register Modal -->
+<div id="registerModal" class="modal">
+  <div class="modal__content">
+    <div class="modal__header">
+      <h2 class="modal__title">Sign Up</h2>
+      <button class="modal__close" id="closeRegisterModal">&times;</button>
+    </div>
+    <form id="registerForm" class="modal__form">
+      <div class="form-group">
+        <label class="form-label">Username:</label>
+        <input
+          type="text"
+          name="username"
+          class="form-input"
+          pattern="[A-Za-z0-9_]{3,20}"
+          required
+        />
+        <small class="form-hint">3-20 characters, letters, numbers and _ only</small>
+      </div>
+      <div class="form-group">
+        <label class="form-label">E-mail:</label>
+        <input type="email" name="email" class="form-input" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password:</label>
+        <div class="password-container">
+          <input
+            type="password"
+            name="password"
+            class="form-input"
+            pattern="[0-9]{8}"
+            required
+          />
+          <span class="password-toggle" id="registerPasswordToggle">👁️</span>
+        </div>
+        <small class="form-hint">Password must contain 8 digits</small>
+      </div>
+      <button type="submit" class="button button--primary button--full">
+        Sign Up
+      </button>
+      <div id="registerStatusMessage" class="status-message"></div>
+    </form>
+    <div class="modal__footer">
+      <p>
+        Already have an account?
+        <a href="#" id="showLoginModal">Login</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- User Menu -->
+<div id="userMenu" class="user-menu" style="display: none">
+  <div class="user-menu__content">
+    <div class="user-menu__header">
+      <p>Welcome, <strong id="usernameDisplay"></strong>!</p>
+    </div>
+    <div class="user-menu__actions">
+      <a href="#" class="user-menu__link">My Profile</a>
+      <a href="#" class="user-menu__link">My Orders</a>
+      <a href="#" class="user-menu__link">Favorites</a>
+      <hr class="user-menu__divider" />
+      <a href="#" id="logoutBtn" class="user-menu__link">Logout</a>
+    </div>
+  </div>
+</div>

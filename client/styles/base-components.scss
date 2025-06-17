@@ -1,0 +1,116 @@
+@use "variables" as *;
+
+/* Специфичные стили для страниц с контентом */
+.content-page {
+  body {
+    padding: $spacing-lg;
+  }
+}
+
+/* Общие стили для форм */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  &__label {
+    display: flex;
+    flex-direction: column;
+    font-size: $font-size-sm;
+    color: $color-text-light;
+    gap: $spacing-xs;
+  }
+
+  &__input {
+    padding: $spacing-sm $spacing-md;
+    font-size: $font-size-sm;
+    border: 1px solid $color-border;
+    border-radius: $border-radius-sm;
+    transition: $transition;
+    width: 100%;
+    box-sizing: border-box;
+
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+      box-shadow: 0 0 0 2px rgba($color-primary, 0.2);
+    }
+  }
+}
+
+/* Специальные кнопки для форм */
+.form-button {
+  padding: $spacing-sm;
+  border: none;
+  background: linear-gradient(135deg, #bb2e9c, #8b1f6b);
+  color: $color-white;
+  border-radius: $border-radius-sm;
+  cursor: pointer;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: $transition;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+/* Утилитарные классы */
+.hidden {
+  display: none;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* Статусные сообщения */
+.status-message {
+  padding: $spacing-md;
+  margin: $spacing-sm 0;
+  border-radius: $border-radius-sm;
+  text-align: center;
+
+  &--error {
+    background-color: #ffebee;
+    color: $color-error;
+    border: 1px solid #ef9a9a;
+  }
+
+  &--success {
+    background-color: #e8f5e9;
+    color: $color-success;
+    border: 1px solid #a5d6a7;
+  }
+
+  // Поддержка старого синтаксиса
+  &.error {
+    background-color: #ffebee;
+    color: $color-error;
+    border: 1px solid #ef9a9a;
+  }
+
+  &.success {
+    background-color: #e8f5e9;
+    color: $color-success;
+    border: 1px solid #a5d6a7;
+  }
+}
+
+/* Валидационные сообщения */
+.validation-message {
+  color: $color-error;
+  font-size: $font-size-sm;
+  margin-top: $spacing-xs;
+  display: none;
+
+  &--show {
+    display: block;
+  }
+}

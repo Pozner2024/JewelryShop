@@ -1,0 +1,56 @@
+/* SASS Variables */
+
+/* Colors */
+$color-primary: #c8860d;
+$color-primary-light: #e6a426;
+$color-primary-dark: #a16f0a;
+$color-secondary: #2c2c2c;
+$color-secondary-light: #4a4a4a;
+$color-white: #ffffff;
+$color-black: #000000;
+$color-gray-light: #f8f8f8;
+$color-gray: #e5e5e5;
+$color-gray-dark: #666666;
+$color-text: #333333;
+$color-text-light: #777777;
+$color-border: #e0e0e0;
+$color-shadow: rgba(0, 0, 0, 0.1);
+$color-success: #27ae60;
+$color-error: #e74c3c;
+
+/* Typography */
+$font-family-primary: "Georgia", "Times New Roman", serif;
+$font-family-secondary: "Arial", "Helvetica", sans-serif;
+$font-size-base: 16px;
+$font-size-sm: 14px;
+$font-size-lg: 18px;
+$font-size-xl: 24px;
+$font-size-xxl: 32px;
+$font-size-xxxl: 48px;
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+$line-height-base: 1.5;
+$line-height-tight: 1.25;
+
+/* Spacing */
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-xxl: 48px;
+$spacing-xxxl: 64px;
+
+/* Layout */
+$container-max-width: 1200px;
+$border-radius: 8px;
+$border-radius-sm: 4px;
+$border-radius-lg: 12px;
+$transition: all 0.3s ease;
+
+/* Shadows */
+$shadow-sm: 0 2px 4px $color-shadow;
+$shadow-md: 0 4px 8px $color-shadow;
+$shadow-lg: 0 8px 16px $color-shadow;

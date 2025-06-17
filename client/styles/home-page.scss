@@ -1,0 +1,64 @@
+@use "variables" as *;
+
+/* Стили для главной страницы приложения */
+.app-page {
+  body {
+    max-width: 800px;
+    margin: 40px auto;
+    font-family: $font-family-secondary;
+    line-height: $line-height-base;
+    color: $color-text;
+  }
+
+  h1 {
+    color: $color-secondary;
+    margin-bottom: $spacing-lg;
+    text-align: center;
+  }
+
+  p {
+    margin: $spacing-sm 0;
+    line-height: $line-height-base;
+  }
+
+  a {
+    color: $color-primary;
+    text-decoration: none;
+    transition: $transition;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+/* Стили для простых страниц с контентом */
+.simple-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: $spacing-xl;
+
+  .page-title {
+    color: $color-secondary;
+    margin-bottom: $spacing-xl;
+    text-align: center;
+    font-size: $font-size-xxl;
+  }
+
+  .page-content {
+    font-size: $font-size-base;
+    line-height: $line-height-base;
+
+    p {
+      margin-bottom: $spacing-md;
+    }
+
+    a {
+      color: $color-primary;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
