@@ -109,7 +109,9 @@ function initProductCardClicks() {
         )
       )
         return;
-      if (slug) {
+      if (slug === "gold-ring-diamond") {
+        window.location.href = "product.html";
+      } else if (slug) {
         window.location.href = `/product/${slug}`;
       }
     });

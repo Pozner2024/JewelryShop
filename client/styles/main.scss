@@ -613,3 +613,18 @@ ol {
     grid-template-columns: 1fr;
   }
 }
+
+.page-header__title {
+  text-align: center;
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  color: $color-primary-dark;
+  margin-bottom: $spacing-sm;
+}
+
+.page-header__subtitle {
+  text-align: center;
+  color: $color-text-light;
+  font-size: $font-size-lg;
+  margin-bottom: $spacing-lg;
+}

@@ -1,4 +1,3 @@
-// client/vite.config.js
 import { defineConfig } from "vite";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
@@ -22,7 +21,7 @@ export default defineConfig({
     proxy: {
       // Всё, что не ассет (styles/, scripts/, assets/ или index.html),
       // проксируем на Express
-      "^(?!/(styles/|scripts/|assets/|index\\.html$)).*": {
+      "^(?!/(styles/|scripts/|assets/|index.html$)).*": {
         target: `http://localhost:${serverPort}`,
         changeOrigin: true,
         rewrite: (path) => path,
@@ -37,7 +36,10 @@ export default defineConfig({
         main: resolve(__dirname, "index.html"),
       },
       output: {
-        assetFileNames: "assets/[name].[ext]",
+        // Добавляем content-hash в имена файлов для корректного кеширования
+        entryFileNames: "assets/[name].[hash].js",
+        chunkFileNames: "assets/[name].[hash].js",
+        assetFileNames: "assets/[name].[hash][extname]",
       },
     },
   },

@@ -1,50 +1,102 @@
-// Handlebars helpers
-export const helpers = {
-  // Helper для повторения элементов определенное количество раз
-  times: function (n, options) {
+// server/modules/handlebars-helpers.js
+
+const helpers = {
+  // Повторяет блок n раз. Внутри блока можно использовать {{@index}} для доступа к индексу.
+  times(n, options) {
     let accum = "";
-    for (let i = 0; i < n; ++i) {
-      accum += options.fn(i);
+    // Пытаемся привести n к числу
+    const count = parseInt(n, 10);
+    if (isNaN(count) || count <= 0) {
+      return ""; // ничего не рендерим, если некорректное число
+    }
+    for (let i = 0; i < count; ++i) {
+      // Передаём в контекст @index значение i
+      accum += options.fn({ ...this, "@index": i, index: i });
     }
     return accum;
   },
 
-  // Helper для математических операций
-  minus: function (a, b) {
-    return a - b;
+  // Арифметика
+  add(a, b) {
+    const aNum = Number(a);
+    const bNum = Number(b);
+    if (isNaN(aNum) || isNaN(bNum)) {
+      return "";
+    }
+    return aNum + bNum;
+  },
+  subtract(a, b) {
+    const aNum = Number(a);
+    const bNum = Number(b);
+    if (isNaN(aNum) || isNaN(bNum)) {
+      return "";
+    }
+    return aNum - bNum;
+  },
+  // minus дублирует subtract, можно оставить или убрать
+  minus(a, b) {
+    const aNum = Number(a);
+    const bNum = Number(b);
+    if (isNaN(aNum) || isNaN(bNum)) {
+      return "";
+    }
+    return aNum - bNum;
+  },
+  inc(value) {
+    const num = parseInt(value, 10);
+    if (isNaN(num)) {
+      return "";
+    }
+    return num + 1;
   },
 
-  // Helper для увеличения числа на 1
-  inc: function (value) {
-    return parseInt(value) + 1;
-  },
-
-  // Helper для условного сравнения
-  eq: function (a, b, options) {
+  // Условные сравнения (блоковые хелперы)
+  eq(a, b, options) {
+    // строгое сравнение
     if (a === b) {
       return options.fn(this);
     }
     return options.inverse(this);
   },
-
-  // Helper для проверки на больше
-  gt: function (a, b, options) {
-    if (a > b) {
+  gt(a, b, options) {
+    const aNum = Number(a);
+    const bNum = Number(b);
+    if (!isNaN(aNum) && !isNaN(bNum) && aNum > bNum) {
       return options.fn(this);
     }
     return options.inverse(this);
   },
-
-  // Helper для форматирования цены
-  formatPrice: function (price) {
-    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  lt(a, b, options) {
+    const aNum = Number(a);
+    const bNum = Number(b);
+    if (!isNaN(aNum) && !isNaN(bNum) && aNum < bNum) {
+      return options.fn(this);
+    }
+    return options.inverse(this);
   },
+  // Можно добавить другие сравнения по необходимости
 
-  // Helper для проверки активного пути
-  isActive: function (currentPath, targetPath, options) {
+  // Форматирование и утилиты
+  formatPrice(price) {
+    // Предполагаем, что price может быть строкой или числом
+    const str = String(price);
+    // Добавляем пробелы между тысячами, если это число
+    return str.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  },
+  isActive(currentPath, targetPath, options) {
+    // Блоковый хелпер: если совпадают пути, рендерит options.fn, иначе options.inverse
     if (currentPath === targetPath) {
       return options.fn(this);
     }
     return options.inverse(this);
   },
+
+  // Пример хелпера для генерации ссылки с активным классом (необязательно)
+  // activeLink(currentPath, targetPath, options) {
+  //   const activeClass = (currentPath === targetPath) ? 'active' : '';
+  //   return `<a href="${targetPath}" class="${activeClass}">${options.fn(this)}</a>`;
+  // },
+
+  // Добавьте здесь другие хелперы по потребности...
 };
+export default helpers;
