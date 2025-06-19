@@ -150,3 +150,52 @@ function addToCartAnimation(btn) {
     btn.disabled = false;
   }, 1500);
 }
+
+function getProductData(btn) {
+  // Пример: собираем данные о товаре с карточки или страницы
+  const product = btn.closest(".product-info, .product-card");
+  if (!product) return {};
+  return {
+    title:
+      product.querySelector(".product-title")?.textContent || "Быстрый заказ",
+    body: `
+      <div>
+        <p>Товар: <strong>${
+          product.querySelector(".product-title")?.textContent || ""
+        }</strong></p>
+        <p>Цена: <strong>${
+          product.querySelector(".product-price")?.textContent || ""
+        }</strong></p>
+        <button class="modal-order-btn">Оформить заказ</button>
+      </div>
+    `,
+  };
+}
+
+async function showQuickOrderModal(data) {
+  // data: {title, body}
+  const modal = document.getElementById("main-modal");
+  if (!modal) return;
+  // Загружаем partial с сервера с нужными данными
+  const params = new URLSearchParams({
+    title: data.title,
+    body: data.body,
+  });
+  const response = await fetch(`/partials/modal?${params.toString()}`);
+  const html = await response.text();
+  modal.outerHTML = html;
+  const newModal = document.getElementById("main-modal");
+  newModal.style.display = "flex";
+  document.body.style.overflow = "hidden";
+  // Закрытие по крестику и фону
+  newModal.querySelector("#close-modal").onclick = () => {
+    newModal.style.display = "none";
+    document.body.style.overflow = "auto";
+  };
+  newModal.onclick = (e) => {
+    if (e.target === newModal) {
+      newModal.style.display = "none";
+      document.body.style.overflow = "auto";
+    }
+  };
+}

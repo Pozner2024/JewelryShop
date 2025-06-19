@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   checkAuthStatus();
 
-  // Открываем окно входа, если не залогинен
+  // Open login window if not logged in
   if (profileBtn) {
     profileBtn.addEventListener("click", (e) => {
       e.preventDefault();
@@ -45,11 +45,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function showModal(modal) {
-    modal.style.display = "flex";
+    modal.classList.add("show");
     document.body.style.overflow = "hidden";
   }
+
   function hideModal(modal) {
-    modal.style.display = "none";
+    modal.classList.remove("show");
     document.body.style.overflow = "auto";
   }
 
@@ -76,10 +77,10 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Функция обновления UI по статусу
-  function updateAuthInterface(isLoggedIn, username = "") {
+  function updateAuthInterface(isLoggedIn, userData = null) {
     const usernameDisplay = document.getElementById("usernameDisplay");
-    if (isLoggedIn) {
-      usernameDisplay.textContent = username;
+    if (isLoggedIn && userData) {
+      usernameDisplay.textContent = userData.login;
     } else {
       usernameDisplay.textContent = "";
     }
@@ -87,81 +88,73 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function checkAuthStatus() {
     const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-    const username = localStorage.getItem("username") || "";
-    updateAuthInterface(isLoggedIn, username);
+    const userData = JSON.parse(localStorage.getItem("userData") || "null");
+    updateAuthInterface(isLoggedIn, userData);
   }
 
-  // Отправка формы регистрации
+  // Registration form submission
   registerForm?.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(registerForm);
     const userData = {
-      username: formData.get("username"),
+      login: formData.get("login"),
       email: formData.get("email"),
       password: formData.get("password"),
     };
     try {
-      const response = await fetch("/api/register", {
+      const response = await fetch("/api/users/register", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
         body: JSON.stringify(userData),
       });
-      const result = await response
-        .json()
-        .catch(() => ({ message: "Невозможно распарсить ответ" }));
+      const result = await response.json();
       const msgEl = document.getElementById("registerStatusMessage");
+      msgEl.textContent = result.message;
+      msgEl.className = `status-message ${response.ok ? "success" : "error"}`;
+
       if (response.ok) {
-        msgEl.textContent = "Регистрация прошла успешно! Теперь войдите.";
-        msgEl.className = "status-message success";
         registerForm.reset();
-        setTimeout(() => {
-          hideModal(registerModal);
-          showModal(loginModal);
-        }, 1500);
-      } else {
-        msgEl.textContent = result.message || "Ошибка регистрации";
-        msgEl.className = "status-message error";
+        msgEl.textContent =
+          "Please check your email and follow the activation link";
       }
     } catch (err) {
       const msgEl = document.getElementById("registerStatusMessage");
-      msgEl.textContent = "Сетевая ошибка. Попробуйте позже.";
+      msgEl.textContent = "Ошибка сети. Пожалуйста, попробуйте позже.";
       msgEl.className = "status-message error";
     }
   });
 
-  // Отправка формы входа
+  // Login form submission
   loginForm?.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(loginForm);
     const userData = {
-      email: formData.get("email"),
+      loginOrEmail: formData.get("loginOrEmail"),
       password: formData.get("password"),
     };
     try {
-      const response = await fetch("/api/login", {
+      const response = await fetch("/api/users/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
       });
-      const result = await response
-        .json()
-        .catch(() => ({ message: "Невозможно распарсить ответ" }));
+      const result = await response.json();
       const msgEl = document.getElementById("loginStatusMessage");
+      msgEl.textContent = result.message;
+      msgEl.className = `status-message ${response.ok ? "success" : "error"}`;
+
       if (response.ok) {
-        msgEl.textContent = "Вход выполнен!";
-        msgEl.className = "status-message success";
         localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("username", result.user.username);
-        localStorage.setItem("token", result.token);
+        localStorage.setItem("userData", JSON.stringify(result.user));
         hideModal(loginModal);
-        updateAuthInterface(true, result.user.username);
-      } else {
-        msgEl.textContent = result.message || "Ошибка входа";
-        msgEl.className = "status-message error";
+        updateAuthInterface(true, result.user);
       }
     } catch (err) {
       const msgEl = document.getElementById("loginStatusMessage");
-      msgEl.textContent = "Сетевая ошибка. Попробуйте позже.";
+      msgEl.textContent = "Ошибка сети. Пожалуйста, попробуйте позже.";
       msgEl.className = "status-message error";
     }
   });
@@ -177,12 +170,17 @@ document.addEventListener("DOMContentLoaded", () => {
     return originalFetch(input, init);
   };
 
-  // Выход из аккаунта
-  logoutBtn?.addEventListener("click", (e) => {
+  // Logout
+  logoutBtn?.addEventListener("click", async (e) => {
     e.preventDefault();
-    localStorage.clear();
-    hideModal(userMenu);
-    updateAuthInterface(false);
+    try {
+      await fetch("/api/users/logout");
+      localStorage.clear();
+      hideModal(userMenu);
+      updateAuthInterface(false);
+    } catch (err) {
+      console.error("Logout error:", err);
+    }
   });
 
   // Плавная прокрутка якорей
@@ -197,33 +195,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Переключатель видимости пароля
-  function togglePasswordVisibility(input, toggle) {
-    if (input.type === "password") {
-      input.type = "text";
-      toggle.textContent = "🙈";
-    } else {
-      input.type = "password";
-      toggle.textContent = "🙉";
-    }
-  }
-  document
-    .getElementById("loginPasswordToggle")
-    ?.addEventListener("click", () => {
-      const input = loginForm.querySelector('[name="password"]');
-      if (input)
-        togglePasswordVisibility(
-          input,
-          document.getElementById("loginPasswordToggle")
-        );
+  const toggles = document.querySelectorAll(".password-toggle");
+  toggles.forEach((toggle) => {
+    toggle.addEventListener("click", function () {
+      const input = this.previousElementSibling;
+      const type = input.type === "password" ? "text" : "password";
+      input.type = type;
+      this.classList.toggle("show");
     });
-  document
-    .getElementById("registerPasswordToggle")
-    ?.addEventListener("click", () => {
-      const input = registerForm.querySelector('[name="password"]');
-      if (input)
-        togglePasswordVisibility(
-          input,
-          document.getElementById("registerPasswordToggle")
-        );
-    });
+  });
 });

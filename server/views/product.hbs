@@ -1,0 +1,189 @@
+<section class="breadcrumbs">
+  <div class="breadcrumbs__container">
+    <nav class="breadcrumbs__nav">
+      <a href="/" class="breadcrumbs__link">Home</a>
+      <span class="breadcrumbs__separator">/</span>
+      <a href="/catalog" class="breadcrumbs__link">Catalog</a>
+      <span class="breadcrumbs__separator">/</span>
+      <span class="breadcrumbs__current">Gold Ring with Diamond</span>
+    </nav>
+  </div>
+</section>
+<!-- Product Main -->
+<main class="main">
+  <section class="product-detail">
+    <div class="product-detail__container">
+      <div class="product-detail__gallery">
+        <div class="product-gallery">
+          <div class="product-gallery__main">
+            <img
+              id="mainProductImage"
+              src="/images/product-1.jpg"
+              alt="Gold Ring with Diamond"
+              class="product-gallery__img"
+            />
+            <button class="product-gallery__wishlist" title="Add to wishlist">
+              <img
+                src="/images/heart-icon.svg"
+                alt="Add to Wishlist"
+                class="product-gallery__heart"
+              />
+            </button>
+          </div>
+          <div class="product-gallery__thumbs">
+            <div class="product-gallery__thumb product-gallery__thumb--active">
+              <img
+                src="/images/product-1.jpg"
+                alt="Gold Ring with Diamond"
+                class="product-gallery__thumb-img"
+              />
+            </div>
+            <div class="product-gallery__thumb">
+              <img
+                src="/images/product-2.jpg"
+                alt="Gold Ring Side"
+                class="product-gallery__thumb-img"
+              />
+            </div>
+            <div class="product-gallery__thumb">
+              <img
+                src="/images/product-3.jpg"
+                alt="Gold Ring on Hand"
+                class="product-gallery__thumb-img"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="product-detail__info">
+        <h1 class="product-info__title">Gold Ring with Diamond</h1>
+        <div class="product-info__meta">
+          <span class="product-info__brand">Elegant</span>
+          <span class="product-info__article">Art. 12345</span>
+        </div>
+        <div class="product-info__price-block">
+          <span class="product-info__price">89 990 ₽</span>
+          <span class="product-info__old-price">99 990 ₽</span>
+        </div>
+        <div class="product-info__rating">
+          <div class="rating">
+            <span class="rating__star rating__star--filled">★</span>
+            <span class="rating__star rating__star--filled">★</span>
+            <span class="rating__star rating__star--filled">★</span>
+            <span class="rating__star rating__star--filled">★</span>
+            <span class="rating__star">★</span>
+          </div>
+          <span class="rating__count">(24)</span>
+        </div>
+        <div class="product-info__sizes">
+          <span class="product-info__label">Size:</span>
+          <button class="size-btn size-btn--active">16</button>
+          <button class="size-btn">17</button>
+          <button class="size-btn">18</button>
+          <button class="size-btn">19</button>
+        </div>
+        <div class="product-info__quantity">
+          <span class="product-info__label">Quantity:</span>
+          <div class="quantity">
+            <button class="quantity__btn quantity__btn--minus" type="button">
+              -
+            </button>
+            <input
+              class="quantity__input"
+              type="number"
+              min="1"
+              max="10"
+              value="1"
+            />
+            <button class="quantity__btn quantity__btn--plus" type="button">
+              +
+            </button>
+          </div>
+        </div>
+        <div class="product-info__actions">
+          <button class="product-info__btn-cart button button--primary">
+            Add to Cart
+          </button>
+          <button class="product-info__btn-buy button button--secondary">
+            Buy Now
+          </button>
+        </div>
+        <ul class="product-info__features">
+          <li>Material: 585 Gold</li>
+          <li>Insert: Diamond 0.25ct</li>
+          <li>Weight: 3.2g</li>
+          <li>Brand: Elegant</li>
+        </ul>
+      </div>
+    </div>
+    <!-- Tabs: Description, Specs, Reviews -->
+    <div class="product-detail__tabs tabs">
+      <div class="tabs__nav">
+        <button class="tabs__btn tabs__btn--active" data-tab="desc">
+          Description
+        </button>
+        <button class="tabs__btn" data-tab="specs">Specifications</button>
+        <button class="tabs__btn" data-tab="reviews">Reviews (3)</button>
+      </div>
+      <div class="tabs__panels">
+        <div class="tabs__panel tabs__panel--active" data-panel="desc">
+          <p>
+            This gold ring with a diamond is a true work of art. The classic
+            design is complemented by a sparkling diamond, making it a perfect
+            gift for any occasion.
+          </p>
+        </div>
+        <div class="tabs__panel" data-panel="specs">
+          <ul>
+            <li>Material: 585 Gold</li>
+            <li>Insert: Diamond 0.25ct</li>
+            <li>Weight: 3.2g</li>
+            <li>Brand: Elegant</li>
+            <li>Country: Russia</li>
+          </ul>
+        </div>
+        <div class="tabs__panel" data-panel="reviews">
+          <div class="review">
+            <div class="review__author">Anna</div>
+            <div class="review__rating">
+              <span class="rating__star rating__star--filled">★</span>
+              <span class="rating__star rating__star--filled">★</span>
+              <span class="rating__star rating__star--filled">★</span>
+              <span class="rating__star rating__star--filled">★</span>
+              <span class="rating__star">★</span>
+            </div>
+            <div class="review__text">
+              Beautiful ring, fast delivery. Very satisfied!
+            </div>
+          </div>
+          <div class="review">
+            <div class="review__author">Olga</div>
+            <div class="review__rating">
+              <span class="rating__star rating__star--filled">★</span>
+              <span class="rating__star rating__star--filled">★</span>
+              <span class="rating__star rating__star--filled">★</span>
+              <span class="rating__star rating__star--filled">★</span>
+              <span class="rating__star rating__star--filled">★</span>
+            </div>
+            <div class="review__text">
+              The diamond sparkles incredibly. Highly recommend!
+            </div>
+          </div>
+          <div class="review">
+            <div class="review__author">Maria</div>
+            <div class="review__rating">
+              <span class="rating__star rating__star--filled">★</span>
+              <span class="rating__star rating__star--filled">★</span>
+              <span class="rating__star rating__star--filled">★</span>
+              <span class="rating__star rating__star--filled">★</span>
+              <span class="rating__star">★</span>
+            </div>
+            <div class="review__text">
+              Great quality and beautiful packaging.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

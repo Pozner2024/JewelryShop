@@ -1,6 +1,6 @@
 @use "variables" as *;
 @use "base-components";
-@use "login-register-modals";
+@use "login-register-modals" as *;
 @use "home-page";
 @use "catalog-products-grid";
 @use "product-detail-page";

@@ -9,19 +9,19 @@ const __dirname = path.dirname(__filename);
 const clientDir = path.join(__dirname, "../../client");
 
 router.get("/", (req, res) => {
-  res.sendFile(path.join(clientDir, "index.html"));
+  res.render("index");
 });
 router.get("/catalog", (req, res) => {
-  res.sendFile(path.join(clientDir, "catalog.html"));
+  res.render("catalog");
 });
 router.get("/about", (req, res) => {
-  res.sendFile(path.join(clientDir, "about.html"));
+  res.render("about");
 });
 router.get("/contacts", (req, res) => {
-  res.sendFile(path.join(clientDir, "contacts.html"));
+  res.render("contacts");
 });
 router.get("/product/:id", (req, res) => {
-  res.sendFile(path.join(clientDir, "product.html"));
+  res.render("product", { id: req.params.id });
 });
 
 export default router;

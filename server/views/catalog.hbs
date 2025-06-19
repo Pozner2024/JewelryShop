@@ -1,0 +1,283 @@
+<main class="main">
+  <!-- Breadcrumbs -->
+  <section class="breadcrumbs">
+    <div class="breadcrumbs__container">
+      <nav class="breadcrumbs__nav">
+        <a href="/" class="breadcrumbs__link">Home</a>
+        <span class="breadcrumbs__separator">/</span>
+        <span class="breadcrumbs__current">Catalog</span>
+      </nav>
+    </div>
+  </section>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="page-header__container">
+      <h1 class="page-header__title">Jewelry Catalog</h1>
+      <p class="page-header__subtitle">
+        Over 500 unique jewelry pieces in our collection
+      </p>
+    </div>
+  </section>
+
+  <!-- Catalog -->
+  <section class="catalog">
+    <div class="catalog__container">
+      <!-- Main Content -->
+      <div class="catalog__main">
+        <!-- Toolbar -->
+        <div class="catalog__toolbar">
+          <div class="catalog__results">
+            Found
+            <span class="catalog__count">120</span>
+            products
+          </div>
+          <div class="catalog__controls">
+            <div class="sort">
+              <label class="sort__label">Sort by:</label>
+              <select class="sort__select">
+                <option value="popular">Popularity</option>
+                <option value="price-asc">Price (ascending)</option>
+                <option value="price-desc">Price (descending)</option>
+                <option value="name">Name</option>
+                <option value="new">New items</option>
+              </select>
+            </div>
+            <div class="view-toggle">
+              <button
+                class="view-toggle__btn view-toggle__btn--active"
+                data-view="grid"
+              >
+                <svg class="view-toggle__icon" viewBox="0 0 24 24">
+                  <rect x="3" y="3" width="7" height="7" />
+                  <rect x="14" y="3" width="7" height="7" />
+                  <rect x="3" y="14" width="7" height="7" />
+                  <rect x="14" y="14" width="7" height="7" />
+                </svg>
+              </button>
+              <button class="view-toggle__btn" data-view="list">
+                <svg class="view-toggle__icon" viewBox="0 0 24 24">
+                  <line x1="8" y1="6" x2="21" y2="6" />
+                  <line x1="8" y1="12" x2="21" y2="12" />
+                  <line x1="8" y1="18" x2="21" y2="18" />
+                  <line x1="3" y1="6" x2="3.01" y2="6" />
+                  <line x1="3" y1="12" x2="3.01" y2="12" />
+                  <line x1="3" y1="18" x2="3.01" y2="18" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="products-grid">
+          <!-- Product Card 1 -->
+          <div class="product-card">
+            <div class="product-card__image">
+              <img
+                src="images/product-1.jpg"
+                alt="Gold Ring with Diamond"
+                class="product-card__img"
+              />
+              <button class="product-card__wishlist">
+                <img
+                  src="images/heart-icon.svg"
+                  alt="Add to Wishlist"
+                  class="product-card__heart"
+                />
+              </button>
+              <div class="product-card__badges">
+                <span class="badge badge--new">New</span>
+              </div>
+            </div>
+            <div class="product-card__content">
+              <h3 class="product-card__title">
+                <a href="/product/1">Gold Ring with Diamond</a>
+              </h3>
+              <div class="product-card__meta">
+                <span class="product-card__brand">Elegant</span>
+                <span class="product-card__article">Art. 12345</span>
+              </div>
+              <div class="product-card__price-block">
+                <p class="product-card__price">89 990 ₽</p>
+                <p class="product-card__old-price">99 990 ₽</p>
+              </div>
+              <div class="product-card__rating">
+                <div class="rating">
+                  <span class="rating__star rating__star--filled">★</span>
+                  <span class="rating__star rating__star--filled">★</span>
+                  <span class="rating__star rating__star--filled">★</span>
+                  <span class="rating__star rating__star--filled">★</span>
+                  <span class="rating__star">★</span>
+                </div>
+                <span class="rating__count">(24)</span>
+              </div>
+              <button class="product-card__btn button button--secondary">
+                Add to Cart
+              </button>
+            </div>
+          </div>
+
+          <!-- Product Card 2 -->
+          <div class="product-card">
+            <div class="product-card__image">
+              <img
+                src="images/product-2.jpg"
+                alt="Silver Earrings with Pearls"
+                class="product-card__img"
+              />
+              <button class="product-card__wishlist">
+                <img
+                  src="images/heart-icon.svg"
+                  alt="Add to Wishlist"
+                  class="product-card__heart"
+                />
+              </button>
+            </div>
+            <div class="product-card__content">
+              <h3 class="product-card__title">
+                Silver Earrings with Pearls
+              </h3>
+              <div class="product-card__meta">
+                <span class="product-card__brand">Classic</span>
+                <span class="product-card__article">Art. 12346</span>
+              </div>
+              <div class="product-card__price-block">
+                <p class="product-card__price">15 490 ₽</p>
+              </div>
+              <div class="product-card__rating">
+                <div class="rating">
+                  <span class="rating__star rating__star--filled">★</span>
+                  <span class="rating__star rating__star--filled">★</span>
+                  <span class="rating__star rating__star--filled">★</span>
+                  <span class="rating__star rating__star--filled">★</span>
+                  <span class="rating__star rating__star--filled">★</span>
+                </div>
+                <span class="rating__count">(18)</span>
+              </div>
+              <button class="product-card__btn button button--secondary">
+                Add to Cart
+              </button>
+            </div>
+          </div>
+
+          <!-- Product Card 3 -->
+          <div class="product-card">
+            <div class="product-card__image">
+              <img
+                src="images/product-3.jpg"
+                alt="Platinum Necklace"
+                class="product-card__img"
+              />
+              <button class="product-card__wishlist">
+                <img
+                  src="images/heart-icon.svg"
+                  alt="Add to Wishlist"
+                  class="product-card__heart"
+                />
+              </button>
+              <div class="product-card__badges">
+                <span class="badge badge--hit">Bestseller</span>
+              </div>
+            </div>
+            <div class="product-card__content">
+              <h3 class="product-card__title">
+                Platinum Necklace with Sapphires
+              </h3>
+              <div class="product-card__meta">
+                <span class="product-card__brand">Premium</span>
+                <span class="product-card__article">Art. 12347</span>
+              </div>
+              <div class="product-card__price-block">
+                <p class="product-card__price">125 000 ₽</p>
+              </div>
+              <div class="product-card__rating">
+                <div class="rating">
+                  <span class="rating__star rating__star--filled">★</span>
+                  <span class="rating__star rating__star--filled">★</span>
+                  <span class="rating__star rating__star--filled">★</span>
+                  <span class="rating__star rating__star--filled">★</span>
+                  <span class="rating__star rating__star--filled">★</span>
+                </div>
+                <span class="rating__count">(36)</span>
+              </div>
+              <button class="product-card__btn button button--secondary">
+                Add to Cart
+              </button>
+            </div>
+          </div>
+
+          <!-- Product Card 4 -->
+          <div class="product-card">
+            <div class="product-card__image">
+              <img
+                src="images/product-4.jpg"
+                alt="Gold Bracelet"
+                class="product-card__img"
+              />
+              <button class="product-card__wishlist">
+                <img
+                  src="images/heart-icon.svg"
+                  alt="Add to Wishlist"
+                  class="product-card__heart"
+                />
+              </button>
+            </div>
+            <div class="product-card__content">
+              <h3 class="product-card__title">
+                Gold Bracelet with Engraving
+              </h3>
+              <div class="product-card__meta">
+                <span class="product-card__brand">Elegant</span>
+                <span class="product-card__article">Art. 12348</span>
+              </div>
+              <div class="product-card__price-block">
+                <p class="product-card__price">42 500 ₽</p>
+              </div>
+              <div class="product-card__rating">
+                <div class="rating">
+                  <span class="rating__star rating__star--filled">★</span>
+                  <span class="rating__star rating__star--filled">★</span>
+                  <span class="rating__star rating__star--filled">★</span>
+                  <span class="rating__star rating__star--filled">★</span>
+                  <span class="rating__star">★</span>
+                </div>
+                <span class="rating__count">(12)</span>
+              </div>
+              <button class="product-card__btn button button--secondary">
+                Add to Cart
+              </button>
+            </div>
+          </div>
+
+          <!-- Additional product cards can be added here following the same pattern -->
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+          <button class="pagination__btn pagination__btn--prev" disabled>
+            <svg class="pagination__icon" viewBox="0 0 24 24">
+              <polyline points="15,18 9,12 15,6"></polyline>
+            </svg>
+            Previous
+          </button>
+          <div class="pagination__pages">
+            <button class="pagination__page pagination__page--active">
+              1
+            </button>
+            <button class="pagination__page">2</button>
+            <button class="pagination__page">3</button>
+            <span class="pagination__dots">...</span>
+            <button class="pagination__page">10</button>
+          </div>
+          <button class="pagination__btn pagination__btn--next">
+            Next
+            <svg class="pagination__icon" viewBox="0 0 24 24">
+              <polyline points="9,18 15,12 9,6"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

@@ -5,6 +5,9 @@ import express from "express";
 import session from "express-session";
 import path from "path";
 import { engine } from "express-handlebars";
+import { fileURLToPath } from "url";
+import bcrypt from "bcrypt";
+import crypto from "crypto";
 
 import {
   HTTP_PORT,
@@ -26,7 +29,9 @@ const webserver = express();
 
 // === 3) Configure Handlebars view engine ===
 // Определяем корневую папку для шаблонов: server/views
-const viewsPath = path.join(process.cwd(), "server", "views");
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const viewsPath = path.join(__dirname, "views");
 const layoutsPath = path.join(viewsPath, "layouts");
 const partialsPath = path.join(viewsPath, "partials");
 
@@ -34,14 +39,14 @@ webserver.engine(
   ".hbs",
   engine({
     extname: ".hbs",
-    defaultLayout: "main",
+    helpers,
     layoutsDir: layoutsPath,
     partialsDir: partialsPath,
-    helpers,
   })
 );
 webserver.set("view engine", ".hbs");
 webserver.set("views", viewsPath);
+console.log("Views path:", viewsPath);
 
 // === 4) Middleware ===
 // Compile SCSS on the fly
@@ -70,150 +75,6 @@ webserver.use(
     store: sessionStore,
   })
 );
-
-// === 5) Page routes ===
-
-// Home page
-// webserver.get("/", (req, res) => {
-//   res.render("index", {
-//     title: "Home",
-//     siteName: "ShineCraft",
-//     scripts: ["scripts/auth.js"],
-//     isHomePage: true,
-//     hero: {
-//       title: "Exclusive ShineCraft",
-//       subtitle:
-//         "Discover our collection of exquisite jewelry crafted by masters with years of experience",
-//       ctaText: "View Catalog",
-//       image: "hero-jewelry.jpg",
-//       imageAlt: "ShineCraft",
-//     },
-//     categoriesTitle: "Product Categories",
-//     categories: [
-//       { name: "Rings", image: "rings.jpg", count: 120 },
-//       { name: "Necklaces", image: "necklaces.jpg", count: 85 },
-//       { name: "Earrings", image: "earrings.jpg", count: 95 },
-//       { name: "Bracelets", image: "bracelets.jpg", count: 60 },
-//     ],
-//     featuredTitle: "Featured Products",
-//     featuredProducts: [
-//       {
-//         id: 1,
-//         slug: "gold-ring-diamond",
-//         name: "Gold Diamond Ring",
-//         price: "$1,200",
-//         image: "product-1.jpg",
-//       },
-//       {
-//         id: 2,
-//         slug: "silver-earrings-pearls",
-//         name: "Silver Pearl Earrings",
-//         price: "$210",
-//         image: "product-2.jpg",
-//       },
-//       {
-//         id: 3,
-//         slug: "platinum-necklace",
-//         name: "Platinum Necklace",
-//         price: "$1,680",
-//         image: "product-3.jpg",
-//       },
-//     ],
-//   });
-// });
-
-// Catalog page
-// webserver.get("/catalog", (req, res) => {
-//   res.render("catalog", {
-//     title: "Каталог",
-//     siteName: "ShineCraft",
-//     scripts: ["scripts/auth.js"],
-//     isCatalogPage: true,
-//     pageTitle: "Jewelry Catalog",
-//     pageSubtitle: "Over 500 unique jewelry pieces in our collection",
-//     productsCount: 120,
-//     products: [
-//       {
-//         id: 1,
-//         slug: "gold-ring-diamond",
-//         name: "Gold Ring with Diamond",
-//         brand: "Elegant",
-//         article: "12345",
-//         price: "89 990",
-//         oldPrice: "99 990",
-//         rating: 4,
-//         reviewsCount: 24,
-//         image: "product-1.jpg",
-//         badge: "New",
-//         badgeType: "new",
-//       },
-//       {
-//         id: 2,
-//         slug: "silver-earrings-pearls",
-//         name: "Silver Earrings with Pearls",
-//         brand: "Classic",
-//         article: "12346",
-//         price: "15 490",
-//         rating: 5,
-//         reviewsCount: 18,
-//         image: "product-2.jpg",
-//       },
-//       {
-//         id: 3,
-//         slug: "platinum-necklace",
-//         name: "Platinum Necklace with Sapphires",
-//         brand: "Premium",
-//         article: "12347",
-//         price: "125 000",
-//         rating: 5,
-//         reviewsCount: 36,
-//         image: "product-3.jpg",
-//         badge: "Bestseller",
-//         badgeType: "hit",
-//       },
-//       {
-//         id: 4,
-//         slug: "gold-bracelet",
-//         name: "Gold Bracelet with Engraving",
-//         brand: "Elegant",
-//         article: "12348",
-//         price: "42 500",
-//         rating: 4,
-//         reviewsCount: 12,
-//         image: "product-4.jpg",
-//       },
-//     ],
-//     pagination: {
-//       currentPage: 1,
-//       hasPrev: false,
-//       hasNext: true,
-//       pages: [
-//         { number: 1, active: true },
-//         { number: 2, active: false },
-//         { number: 3, active: false },
-//       ],
-//     },
-//     // При использовании pagination в шаблонах можно вызывать {{#times pages.length}} ... {{/times}}
-//     // и внутри использовать {{@index}} или {{inc @index}} для нумерации.
-//   });
-// });
-
-// Product detail page
-// webserver.get("/product/:slug", (req, res) => {
-//   const { slug } = req.params;
-//   // Здесь можно подтягивать данные по slug из БД, а не захардкожено
-//   res.render("product", { /* ... */ });
-// });
-
-// About page
-// webserver.get("/about", (req, res) => {
-//   res.render("page", { /* ... */ });
-// });
-
-// Contacts page
-// webserver.get("/contacts", (req, res) => {
-//   res.render("page", { /* ... */ });
-// });
 
 // Legacy routes
 webserver.get("/app", (_req, res) => res.redirect("/"));

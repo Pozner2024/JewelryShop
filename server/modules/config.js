@@ -27,7 +27,7 @@ export const dbConfig = {
   port: 3306,
   user: "root",
   password: "",
-  database: "file_storage",
+  database: "jewelryshop",
   waitForConnections: true,
 
   connectionLimit: 10,
