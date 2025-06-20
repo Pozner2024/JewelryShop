@@ -1,0 +1,41 @@
+<div class="product-card" data-product-id="{{this.id}}">
+    <div class="product-card__image">
+        <a href="/product/{{this.id}}">
+            <img src="{{this.image_url}}" alt="{{this.name}}" class="product-card__img" />
+        </a>
+        <button class="product-card__wishlist {{#if this.is_liked}}liked{{/if}}">
+            <img src="/images/heart-icon.svg" alt="Add to Wishlist" class="product-card__heart" />
+        </button>
+        {{#if this.badge}}
+        <div class="product-card__badges">
+            <span class="badge badge--{{this.badge.type}}">{{this.badge.text}}</span>
+        </div>
+        {{/if}}
+    </div>
+    <div class="product-card__content">
+        <h3 class="product-card__title">
+            <a href="/product/{{this.id}}">{{this.name}}</a>
+        </h3>
+        <div class="product-card__meta">
+            <span class="product-card__brand">{{this.brand}}</span>
+            <span class="product-card__article">Art. {{this.article}}</span>
+        </div>
+        <div class="product-card__price-block">
+            <p class="product-card__price">{{this.price}} ₽</p>
+            {{#if this.old_price}}
+            <p class="product-card__old-price">{{this.old_price}} ₽</p>
+            {{/if}}
+        </div>
+        <div class="product-card__rating">
+            <!-- Rating logic can be added here if available -->
+        </div>
+        <button class="product-card__btn button button--secondary">
+            Add to Cart
+        </button>
+        {{#if showRemoveButton}}
+        <button class="product-card__btn-remove button button--tertiary">
+            Remove from Favorites
+        </button>
+        {{/if}}
+    </div>
+</div> 

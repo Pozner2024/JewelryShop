@@ -87,20 +87,10 @@ async function sendActivationEmail(email, data) {
 }
 
 export async function requireAuth(req, res, next) {
-  if (req.session?.user_id) {
-    try {
-      const user = await findActiveUserByLoginOrEmail(req.session.user_login);
-      if (user) {
-        req.user = user;
-        return next();
-      }
-    } catch (e) {
-      console.error("Ошибка при проверке сессии:", e);
-    }
+  if (req.user) {
+    return next();
   }
-  if (!req.session) {
-    return res.status(500).json({ error: "Сессия не инициализирована" });
-  }
+
   if (req.xhr || req.headers.accept?.includes("application/json")) {
     return res.status(401).json({ error: "Неавторизован" });
   }
@@ -109,7 +99,6 @@ export async function requireAuth(req, res, next) {
 
 export async function register(req, res) {
   try {
-    console.log("Registration request body:", req.body);
     const { login, email, password } = req.body;
 
     // Validation
@@ -153,14 +142,14 @@ export async function register(req, res) {
         .json({ message: "Этот email уже зарегистрирован" });
     }
 
-    // Generate activation token and hash password
+    // Generate activation token
     const activationToken = crypto.randomBytes(32).toString("hex");
-    const passwordHash = await bcrypt.hash(password, 10);
 
     // Create user with activation token (temporarily stored in password_hash)
     await createUser(login, email, activationToken);
 
     // Generate activation link with password hash
+    const passwordHash = await bcrypt.hash(password, 10);
     const activationLink = `http://localhost:5173/api/users/activate?token=${activationToken}&password=${passwordHash}`;
 
     // Send activation email
@@ -198,8 +187,8 @@ export async function activate(req, res) {
     // Activate user and set password
     await activateUserAndSetPassword(user.user_email, password);
 
-    // Redirect to home with success message
-    return res.redirect("/?activated=true");
+    // Redirect to home with success message to show login modal
+    return res.redirect(`/?activated=true`);
   } catch (err) {
     console.error("Ошибка активации:", err);
     return res.status(500).json({
@@ -211,25 +200,14 @@ export async function activate(req, res) {
 
 export async function login(req, res) {
   try {
-    console.log("Login request body:", req.body);
-    console.log("Login request headers:", req.headers);
-
     const { loginOrEmail, password } = req.body;
     if (!loginOrEmail || !password) {
-      console.log("Missing login fields:", {
-        loginOrEmail: !!loginOrEmail,
-        password: !!password,
-      });
       return res
         .status(400)
         .json({ message: "Все поля обязательны для заполнения." });
     }
 
     const user = await findUserByLoginOrEmail(loginOrEmail);
-    console.log(
-      "Found user:",
-      user ? { ...user, password_hash: "[HIDDEN]" } : null
-    );
 
     if (!user) {
       return res
@@ -238,7 +216,6 @@ export async function login(req, res) {
     }
 
     const match = await bcrypt.compare(password, user.password_hash);
-    console.log("Password match:", match);
 
     if (!match) {
       return res
@@ -247,10 +224,6 @@ export async function login(req, res) {
     }
 
     if (!user.is_active) {
-      console.log("User not activated:", {
-        login: user.login,
-        is_active: user.is_active,
-      });
       return res.status(400).json({
         message:
           "Аккаунт не активирован. Пожалуйста, проверьте вашу почту и перейдите по ссылке для активации.",

@@ -84,101 +84,14 @@
   <section class="featured">
     <div class="featured__container">
       <h2 class="featured__title">Featured Products</h2>
-      <div class="featured__grid">
-        <div class="product-card" data-slug="gold-ring-diamond">
-          <div class="product-card__image">
-            <img
-              src="images/product-1.jpg"
-              alt="Gold Ring with Diamond"
-              class="product-card__img"
-            />
-            <button class="product-card__wishlist">
-              <img
-                src="images/heart-icon.svg"
-                alt="Add to Wishlist"
-                class="product-card__heart"
-              />
-            </button>
-          </div>
-          <div class="product-card__content">
-            <h3 class="product-card__title">Gold Ring with Diamond</h3>
-            <p class="product-card__price">89 990 ₽</p>
-            <button class="product-card__btn button button--secondary">
-              Add to Cart
-            </button>
-          </div>
-        </div>
-        <div class="product-card">
-          <div class="product-card__image">
-            <img
-              src="images/product-2.jpg"
-              alt="Silver Earrings"
-              class="product-card__img"
-            />
-            <button class="product-card__wishlist">
-              <img
-                src="images/heart-icon.svg"
-                alt="Add to Wishlist"
-                class="product-card__heart"
-              />
-            </button>
-          </div>
-          <div class="product-card__content">
-            <h3 class="product-card__title">Silver Earrings with Pearls</h3>
-            <p class="product-card__price">15 490 ₽</p>
-            <button class="product-card__btn button button--secondary">
-              Add to Cart
-            </button>
-          </div>
-        </div>
-        <div class="product-card">
-          <div class="product-card__image">
-            <img
-              src="images/product-3.jpg"
-              alt="Platinum Necklace"
-              class="product-card__img"
-            />
-            <button class="product-card__wishlist">
-              <img
-                src="images/heart-icon.svg"
-                alt="Add to Wishlist"
-                class="product-card__heart"
-              />
-            </button>
-          </div>
-          <div class="product-card__content">
-            <h3 class="product-card__title">Platinum Necklace</h3>
-            <p class="product-card__price">125 000 ₽</p>
-            <button class="product-card__btn button button--secondary">
-              Add to Cart
-            </button>
-          </div>
-        </div>
-        <div class="product-card">
-          <div class="product-card__image">
-            <img
-              src="images/product-4.jpg"
-              alt="Gold Bracelet"
-              class="product-card__img"
-            />
-            <button class="product-card__wishlist">
-              <img
-                src="images/heart-icon.svg"
-                alt="Add to Wishlist"
-                class="product-card__heart"
-              />
-            </button>
-          </div>
-          <div class="product-card__content">
-            <h3 class="product-card__title">
-              Gold Bracelet with Engraving
-            </h3>
-            <p class="product-card__price">32 990 ₽</p>
-            <button class="product-card__btn button button--secondary">
-              Add to Cart
-            </button>
-          </div>
-        </div>
+      <div class="featured__grid products-grid">
+        {{#if featuredProducts}}
+          {{#each featuredProducts}}
+            {{> product-card this}}
+          {{/each}}
+        {{else}}
+          <p>Could not load featured products at this time.</p>
+        {{/if}}
       </div>
     </div>
   </section>

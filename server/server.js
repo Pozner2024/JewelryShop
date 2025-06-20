@@ -15,11 +15,13 @@ import {
   sessionConfig,
   CustomSessionStore,
 } from "./modules/config.js";
-import { initDbPool } from "./modules/db.js";
+import { initDbPool, findActiveUserByLoginOrEmail } from "./modules/db.js";
 import { sassMiddleware } from "./modules/sass-middleware.js";
 import helpers from "./modules/handlebars-helpers.js";
 import usersRoutes from "./routes/users.js";
 import pagesRouter from "./routes/pages.js";
+import likesRouter from "./routes/likes.js";
+import cartRouter from "./routes/cart.js";
 
 // === 1) Initialize database ===
 await initDbPool();
@@ -76,13 +78,34 @@ webserver.use(
   })
 );
 
+webserver.use(async (req, res, next) => {
+  if (req.session?.user_login) {
+    try {
+      const user = await findActiveUserByLoginOrEmail(req.session.user_login);
+      if (user) {
+        res.locals.user = {
+          login: user.login,
+          email: user.user_email,
+          role: user.role,
+        };
+        req.user = user; // for requireAuth
+      }
+    } catch (e) {
+      console.error("Error fetching user for session:", e);
+    }
+  }
+  next();
+});
+
 // Legacy routes
 webserver.get("/app", (_req, res) => res.redirect("/"));
 webserver.get("/register", (_req, res) => res.redirect("/?register=true"));
 webserver.get("/login", (_req, res) => res.redirect("/?login=true"));
 
-// === 6) Mount API routes under /api/users ===
+// === 6) Mount API routes ===
 webserver.use("/api/users", usersRoutes);
+webserver.use("/api/likes", likesRouter);
+webserver.use("/api/cart", cartRouter);
 
 // === 7) Mount pages routes ===
 webserver.use("/", pagesRouter);

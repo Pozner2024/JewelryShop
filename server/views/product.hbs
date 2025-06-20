@@ -5,28 +5,28 @@
       <span class="breadcrumbs__separator">/</span>
       <a href="/catalog" class="breadcrumbs__link">Catalog</a>
       <span class="breadcrumbs__separator">/</span>
-      <span class="breadcrumbs__current">Gold Ring with Diamond</span>
+      <span class="breadcrumbs__current">{{product.name}}</span>
     </nav>
   </div>
 </section>
 <!-- Product Main -->
 <main class="main">
   <section class="product-detail">
-    <div class="product-detail__container">
+    <div class="product-detail__container" data-product-id="{{product.id}}">
       <div class="product-detail__gallery">
         <div class="product-gallery">
-          <div class="product-gallery__main">
+          <div class="product-gallery__main product-card">
             <img
               id="mainProductImage"
-              src="/images/product-1.jpg"
-              alt="Gold Ring with Diamond"
+              src="{{product.image_url}}"
+              alt="{{product.name}}"
               class="product-gallery__img"
             />
-            <button class="product-gallery__wishlist" title="Add to wishlist">
+            <button class="product-gallery__wishlist product-card__wishlist {{#if product.is_liked}}liked{{/if}}" title="Add to wishlist">
               <img
                 src="/images/heart-icon.svg"
                 alt="Add to Wishlist"
-                class="product-gallery__heart"
+                class="product-gallery__heart product-card__heart"
               />
             </button>
           </div>
@@ -56,14 +56,16 @@
         </div>
       </div>
       <div class="product-detail__info">
-        <h1 class="product-info__title">Gold Ring with Diamond</h1>
+        <h1 class="product-info__title">{{product.name}}</h1>
         <div class="product-info__meta">
-          <span class="product-info__brand">Elegant</span>
-          <span class="product-info__article">Art. 12345</span>
+          <span class="product-info__brand">{{product.brand}}</span>
+          <span class="product-info__article">Art. {{product.article}}</span>
         </div>
         <div class="product-info__price-block">
-          <span class="product-info__price">89 990 ₽</span>
-          <span class="product-info__old-price">99 990 ₽</span>
+          <span class="product-info__price">{{product.price}} ₽</span>
+          {{#if product.old_price}}
+          <span class="product-info__old-price">{{product.old_price}} ₽</span>
+          {{/if}}
         </div>
         <div class="product-info__rating">
           <div class="rating">
@@ -104,9 +106,9 @@
           <button class="product-info__btn-cart button button--primary">
             Add to Cart
           </button>
-          <button class="product-info__btn-buy button button--secondary">
-            Buy Now
-          </button>
+        </div>
+        <div class="product-info__description">
+            <p>{{product.description}}</p>
         </div>
         <ul class="product-info__features">
           <li>Material: 585 Gold</li>

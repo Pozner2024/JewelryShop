@@ -1,0 +1,77 @@
+<main class="main">
+  <section class="breadcrumbs">
+    <div class="breadcrumbs__container">
+      <nav class="breadcrumbs__nav">
+        <a href="/" class="breadcrumbs__link">Home</a>
+        <span class="breadcrumbs__separator">/</span>
+        <span class="breadcrumbs__current">Shopping Cart</span>
+      </nav>
+    </div>
+  </section>
+
+  <section class="cart-page">
+    <div class="cart-page__container">
+      <h1>Shopping Cart</h1>
+      <div class="cart-content">
+        <div class="cart-items">
+          <!-- Cart items will be rendered here -->
+          {{#if cartItems.length}}
+            {{#each cartItems}}
+              <div class="cart-item" data-product-id="{{this.id}}">
+                <img
+                  src="{{this.image_url}}"
+                  alt="{{this.name}}"
+                  class="cart-item__image"
+                />
+                <div class="cart-item__details">
+                  <h3 class="cart-item__title">{{this.name}}</h3>
+                  <p class="cart-item__price">{{this.price}} ₽</p>
+                </div>
+                <div class="cart-item__quantity">
+                  <button class="quantity__btn quantity__btn--minus">-</button>
+                  <input
+                    class="quantity__input"
+                    type="number"
+                    value="{{this.quantity}}"
+                    min="1"
+                  />
+                  <button class="quantity__btn quantity__btn--plus">+</button>
+                </div>
+                <p class="cart-item__total-price">{{multiply
+                    this.price
+                    this.quantity
+                  }}
+                  ₽</p>
+                <button class="cart-item__remove">×</button>
+              </div>
+            {{/each}}
+          {{else}}
+            <p class="cart-empty-message">Your cart is empty.
+              <a href="/catalog">Continue shopping</a>.</p>
+          {{/if}}
+        </div>
+
+        {{#if cartItems.length}}
+          <div class="cart-summary">
+            <h2>Order Summary</h2>
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <span class="summary-subtotal">{{cartTotal}} ₽</span>
+            </div>
+            <div class="summary-row">
+              <span>Shipping</span>
+              <span>Free</span>
+            </div>
+            <hr />
+            <div class="summary-row summary-total">
+              <span>Total</span>
+              <span class="summary-grand-total">{{cartTotal}} ₽</span>
+            </div>
+            <button class="button button--primary button--full">Proceed to
+              Checkout</button>
+          </div>
+        {{/if}}
+      </div>
+    </div>
+  </section>
+</main>

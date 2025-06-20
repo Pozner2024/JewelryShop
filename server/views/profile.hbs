@@ -1,0 +1,26 @@
+<div class="profile-container">
+  <h1>My Profile</h1>
+  <div class="profile-info">
+    <p><strong>Username:</strong> {{user.login}}</p>
+    <p><strong>Email:</strong> {{user.user_email}}</p>
+    <p><strong>Role:</strong> {{user.role}}</p>
+  </div>
+  <div class="profile-actions">
+    <a href="/api/users/logout" class="btn btn-primary">Sign Out</a>
+  </div>
+
+  <hr class="profile-divider">
+
+  <div class="liked-products-container">
+    <h2>Favorite Products</h2>
+    <div id="liked-products-grid" class="products-grid">
+      {{#if likedProducts}}
+        {{#each likedProducts}}
+          {{> product-card this showRemoveButton=true}}
+        {{/each}}
+      {{else}}
+        <p>You haven't liked any products yet.</p>
+      {{/if}}
+    </div>
+  </div>
+</div>

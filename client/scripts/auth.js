@@ -1,5 +1,6 @@
 // client/scripts/auth.js
 document.addEventListener("DOMContentLoaded", () => {
+  const urlParams = new URLSearchParams(window.location.search);
   const profileBtn = document.getElementById("profileBtn");
   const loginModal = document.getElementById("loginModal");
   const registerModal = document.getElementById("registerModal");
@@ -16,16 +17,60 @@ document.addEventListener("DOMContentLoaded", () => {
 
   checkAuthStatus();
 
+  const profileDropdownBtn = document.getElementById("profileDropdownBtn");
+  const profileDropdown = document.getElementById("profileDropdown");
+
+  if (profileDropdownBtn) {
+    profileDropdownBtn.addEventListener("click", (event) => {
+      event.stopPropagation();
+      profileDropdown.classList.toggle("show");
+    });
+  }
+
+  window.addEventListener("click", (event) => {
+    if (
+      profileDropdown &&
+      !profileDropdown.contains(event.target) &&
+      !profileDropdownBtn.contains(event.target)
+    ) {
+      profileDropdown.classList.remove("show");
+    }
+  });
+
+  // Handle account activation
+  if (urlParams.has("activated")) {
+    const msgEl = document.getElementById("loginStatusMessage");
+    if (msgEl) {
+      msgEl.textContent = "Аккаунт успешно активирован. Пожалуйста, войдите.";
+      msgEl.className = "status-message success";
+    }
+    showModal(loginModal);
+    // Remove the query parameter from the URL
+    const newUrl =
+      window.location.protocol +
+      "//" +
+      window.location.host +
+      window.location.pathname;
+    window.history.pushState({ path: newUrl }, "", newUrl);
+  }
+
+  // Open login modal if url has ?login=true
+  if (urlParams.has("login")) {
+    const loginOrEmailField = document.querySelector(
+      '#loginForm input[name="loginOrEmail"]'
+    );
+    if (loginOrEmailField) {
+      loginOrEmailField.value =
+        urlParams.get("user_login") || urlParams.get("user_email") || "";
+    }
+    showModal(loginModal);
+  }
+
   // Open login window if not logged in
   if (profileBtn) {
     profileBtn.addEventListener("click", (e) => {
       e.preventDefault();
-      const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-      if (isLoggedIn) {
-        toggleUserMenu();
-      } else {
-        showModal(loginModal);
-      }
+      showModal(loginModal);
     });
   }
 
@@ -151,6 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("userData", JSON.stringify(result.user));
         hideModal(loginModal);
         updateAuthInterface(true, result.user);
+        window.location.reload();
       }
     } catch (err) {
       const msgEl = document.getElementById("loginStatusMessage");
@@ -176,8 +222,8 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       await fetch("/api/users/logout");
       localStorage.clear();
-      hideModal(userMenu);
       updateAuthInterface(false);
+      window.location.reload();
     } catch (err) {
       console.error("Logout error:", err);
     }

@@ -5,11 +5,16 @@
   <link rel="stylesheet" href="/styles/main.scss">
 </head>
 <body>
-  {{> header}}
-  {{{body}}}
-  {{> footer}}
+  <div class="page-wrapper">
+    {{> header}}
+    <main class="main-content">
+        {{{body}}}
+    </main>
+    {{> footer}}
+  </div>
   {{> modal}}
-  <script src="/scripts/partials-loader.js"></script>
   <script src="/scripts/auth.js"></script>
+  <script src="/scripts/likes.js"></script>
+  <script src="/scripts/cart.js"></script>
 </body>
 </html>

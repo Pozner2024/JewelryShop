@@ -98,5 +98,11 @@ const helpers = {
   // },
 
   // Добавьте здесь другие хелперы по потребности...
+  json: function (context) {
+    return JSON.stringify(context);
+  },
+  multiply: function (a, b) {
+    return (parseFloat(a) * parseInt(b, 10)).toFixed(2);
+  },
 };
 export default helpers;

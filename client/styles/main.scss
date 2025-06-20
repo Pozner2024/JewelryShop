@@ -5,6 +5,8 @@
 @use "catalog-products-grid";
 @use "product-detail-page";
 @use "about-contacts-pages";
+@use "profile-page";
+@use "cart-page";
 
 /* Reset and Base Styles - должны быть первыми */
 * {
@@ -19,12 +21,25 @@ html {
 }
 
 body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   font-family: $font-family-secondary;
   line-height: $line-height-base;
   color: $color-text;
   background-color: $color-white;
   margin: 0;
   padding: 0;
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.main-content {
+  flex-grow: 1;
 }
 
 img {
@@ -390,22 +405,27 @@ ol {
 
 .product-card__wishlist {
   position: absolute;
-  top: $spacing-md;
-  right: $spacing-md;
-  width: 40px;
-  height: 40px;
-  background-color: $color-white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: $shadow-sm;
-  opacity: 0;
-  transition: $transition;
-}
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
 
-.product-card:hover .product-card__wishlist {
-  opacity: 1;
+  .product-card__heart {
+    width: 24px;
+    height: 24px;
+    transition: all 0.2s ease;
+  }
+
+  &.liked .product-card__heart {
+    filter: invert(25%) sepia(87%) saturate(7483%) hue-rotate(358deg)
+      brightness(97%) contrast(119%); /* Turns the SVG red */
+  }
+
+  &:hover .product-card__heart {
+    transform: scale(1.1);
+  }
 }
 
 .product-card__heart {
@@ -627,4 +647,43 @@ ol {
   color: $color-text-light;
   font-size: $font-size-lg;
   margin-bottom: $spacing-lg;
+}
+
+.header__profile-container {
+  position: relative;
+}
+
+.profile-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  min-width: 160px;
+  z-index: 1001;
+  padding: 0.5rem 0;
+
+  &.show {
+    display: block;
+  }
+
+  p {
+    padding: 0.5rem 1rem;
+    margin: 0;
+    font-weight: bold;
+  }
+
+  a {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: #333;
+    text-decoration: none;
+
+    &:hover {
+      background-color: #f5f5f5;
+    }
+  }
 }

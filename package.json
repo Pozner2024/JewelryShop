@@ -21,6 +21,7 @@
     "sass": "^1.89.2"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "express-handlebars": "^8.0.1"
   }
 }
