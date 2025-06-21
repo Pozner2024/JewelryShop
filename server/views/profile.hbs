@@ -11,6 +11,113 @@
 
   <hr class="profile-divider">
 
+  {{#if users}}
+  {{! Admin View }}
+  <div class="admin-dashboard">
+    <div class="admin-nav">
+      <button class="admin-nav-btn active" data-target="users-section">Users</button>
+      <button class="admin-nav-btn" data-target="products-section">Products</button>
+      <button class="admin-nav-btn" data-target="sales-section">Sales</button>
+    </div>
+
+    <div id="users-section" class="admin-section">
+      <h3>All Users</h3>
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Login</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Active</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each users}}
+          <tr>
+            <td>{{this.id}}</td>
+            <td>{{this.login}}</td>
+            <td>{{this.user_email}}</td>
+            <td>{{this.role}}</td>
+            <td>{{this.is_active}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <div id="products-section" class="admin-section" style="display: none;">
+      <h3>All Products</h3>
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Brand</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each products}}
+          <tr>
+            <td>{{this.id}}</td>
+            <td>{{this.name}}</td>
+            <td>{{this.price}}</td>
+            <td>{{this.brand}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <div id="sales-section" class="admin-section" style="display: none;">
+      <h3>Sales Data</h3>
+      {{#if sales}}
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Purchased Products (In Cart)</th>
+              <th>Liked Products</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each sales}}
+              <tr>
+                <td>{{this.login}}<br />({{this.user_email}})</td>
+                <td>
+                  {{#if this.purchases.length}}
+                    <ul class="sales-list">
+                      {{#each this.purchases}}
+                        <li>{{this.name}} (Qty: {{this.quantity}}) - ${{this.price}}</li>
+                      {{/each}}
+                    </ul>
+                  {{else}}
+                    <p>No purchases.</p>
+                  {{/if}}
+                </td>
+                <td>
+                  {{#if this.likes.length}}
+                    <ul class="sales-list">
+                      {{#each this.likes}}
+                        <li>{{this.name}} - ${{this.price}}</li>
+                      {{/each}}
+                    </ul>
+                  {{else}}
+                    <p>No likes.</p>
+                  {{/if}}
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      {{else}}
+        <p>No sales data available.</p>
+      {{/if}}
+    </div>
+  </div>
+  {{else}}
+  {{! Regular User View }}
   <div class="liked-products-container">
     <h2>Favorite Products</h2>
     <div id="liked-products-grid" class="products-grid">
@@ -23,4 +130,5 @@
       {{/if}}
     </div>
   </div>
+  {{/if}}
 </div>

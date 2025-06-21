@@ -13,8 +13,16 @@
     {{> footer}}
   </div>
   {{> modal}}
+ 
+  <!-- EXTERNAL LIBRARIES -->
+  <script src="https://cdn.tiny.cloud/1/{{tinyMceApiKey}}/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+  
+  <!-- OUR SCRIPTS (should be last, as they depend on the above) -->
   <script src="/scripts/auth.js"></script>
   <script src="/scripts/likes.js"></script>
   <script src="/scripts/cart.js"></script>
+  <script src="/scripts/profile.js"></script>
+  <script src="/scripts/about.js"></script>
+  
 </body>
 </html>

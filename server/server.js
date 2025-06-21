@@ -8,6 +8,7 @@ import { engine } from "express-handlebars";
 import { fileURLToPath } from "url";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
+import exphbs from "express-handlebars";
 
 import {
   HTTP_PORT,
@@ -37,25 +38,25 @@ const viewsPath = path.join(__dirname, "views");
 const layoutsPath = path.join(viewsPath, "layouts");
 const partialsPath = path.join(viewsPath, "partials");
 
-webserver.engine(
-  ".hbs",
-  engine({
-    extname: ".hbs",
-    helpers,
-    layoutsDir: layoutsPath,
-    partialsDir: partialsPath,
-  })
-);
+const hbs = exphbs.create({
+  extname: ".hbs",
+  defaultLayout: "main",
+  layoutsDir: layoutsPath,
+  partialsDir: partialsPath,
+  helpers: {
+    ...helpers,
+  },
+});
+
+webserver.engine(".hbs", hbs.engine);
 webserver.set("view engine", ".hbs");
 webserver.set("views", viewsPath);
-console.log("Views path:", viewsPath);
 
 // === 4) Middleware ===
 // Compile SCSS on the fly
 webserver.use(sassMiddleware);
 
 // Serve static assets from client directory
-// CLIENT_DIR должен быть абсолютным путём к папке client (например: path.join(process.cwd(), 'client', 'dist'))
 webserver.use(express.static(CLIENT_DIR, { index: false }));
 
 // Parse URL-encoded bodies and JSON
@@ -88,12 +89,14 @@ webserver.use(async (req, res, next) => {
           email: user.user_email,
           role: user.role,
         };
+        res.locals.isAdmin = user.role === "admin";
         req.user = user; // for requireAuth
       }
     } catch (e) {
       console.error("Error fetching user for session:", e);
     }
   }
+  res.locals.tinyMceApiKey = process.env.TINYMCE_API_KEY || "";
   next();
 });
 

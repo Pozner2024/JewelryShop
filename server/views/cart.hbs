@@ -25,7 +25,7 @@
                 />
                 <div class="cart-item__details">
                   <h3 class="cart-item__title">{{this.name}}</h3>
-                  <p class="cart-item__price">{{this.price}} ₽</p>
+                  <p class="cart-item__price">${{this.price}}</p>
                 </div>
                 <div class="cart-item__quantity">
                   <button class="quantity__btn quantity__btn--minus">-</button>
@@ -37,12 +37,12 @@
                   />
                   <button class="quantity__btn quantity__btn--plus">+</button>
                 </div>
-                <p class="cart-item__total-price">{{multiply
-                    this.price
-                    this.quantity
-                  }}
-                  ₽</p>
-                <button class="cart-item__remove">×</button>
+                <div class="cart-item__total">
+                  <p class="cart-item__total-price">
+                    ${{multiply this.price this.quantity}}
+                  </p>
+                  <button class="cart-item__remove">Remove</button>
+                </div>
               </div>
             {{/each}}
           {{else}}
@@ -56,7 +56,7 @@
             <h2>Order Summary</h2>
             <div class="summary-row">
               <span>Subtotal</span>
-              <span class="summary-subtotal">{{cartTotal}} ₽</span>
+              <span class="summary-subtotal">${{cartTotal}}</span>
             </div>
             <div class="summary-row">
               <span>Shipping</span>
@@ -65,7 +65,7 @@
             <hr />
             <div class="summary-row summary-total">
               <span>Total</span>
-              <span class="summary-grand-total">{{cartTotal}} ₽</span>
+              <span class="summary-grand-total">${{cartTotal}}</span>
             </div>
             <button class="button button--primary button--full">Proceed to
               Checkout</button>

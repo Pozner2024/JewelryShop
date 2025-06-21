@@ -1,48 +1,36 @@
-<section class="breadcrumbs">
-  <div class="breadcrumbs__container">
-    <nav class="breadcrumbs__nav">
-      <a href="/" class="breadcrumbs__link">Home</a>
-      <span class="breadcrumbs__separator">/</span>
-      <span class="breadcrumbs__current">About</span>
-    </nav>
-  </div>
-</section>
 <main class="main">
-  <section class="page-header">
-    <div class="page-header__container">
-      <h1 class="page-header__title">About</h1>
-      <p class="page-header__subtitle">Information about our store</p>
+  <section class="breadcrumbs">
+    <div class="breadcrumbs__container">
+      <nav class="breadcrumbs__nav">
+        <a href="/" class="breadcrumbs__link">Home</a>
+        <span class="breadcrumbs__separator">/</span>
+        <span class="breadcrumbs__current">About Us</span>
+      </nav>
     </div>
   </section>
-  <section class="content about-content">
-    <h2>Our Mission</h2>
-    <p>
-      We strive to make the world more beautiful by offering exquisite jewelry
-      for special moments and everyday life. It is important for us that every
-      customer feels unique.
-    </p>
-    <h2>Why Choose Us?</h2>
-    <ul>
-      <li>Exclusive design and wide assortment</li>
-      <li>Only certified materials and gemstones</li>
-      <li>Quality guarantee for all products</li>
-      <li>Professional jewelers with years of experience</li>
-      <li>Personalized approach to every customer</li>
-    </ul>
-    <h2>Our Team</h2>
-    <p>
-      Our team consists of the best craftsmen, designers, and consultants who
-      will help you choose your dream jewelry or create a custom order.
-    </p>
-    <h2>Certificates & Guarantees</h2>
-    <p>
-      All products undergo strict quality control and are accompanied by the
-      necessary certificates. We provide warranty and service support.
-    </p>
-    <h2>Partnership</h2>
-    <p>
-      We invite wholesale buyers, designers, and corporate clients to cooperate.
-      Special conditions and individual offers for you.
-    </p>
+  <section class="about-content">
+    <div id="about-content-display">
+      {{{content}}}
+    </div>
+
+    <div id="about-content-editor" style="display: none;">
+      <textarea id="about-content-textarea"></textarea>
+    </div>
+
+    {{#if isAdmin}}
+      <div class="admin-edit-controls">
+        <button id="edit-about-btn" class="btn btn-secondary">Edit</button>
+        <button
+          id="save-about-btn"
+          class="btn btn-primary"
+          style="display: none;"
+        >Save</button>
+        <button
+          id="cancel-about-btn"
+          class="btn btn-light"
+          style="display: none;"
+        >Cancel</button>
+      </div>
+    {{/if}}
   </section>
 </main>

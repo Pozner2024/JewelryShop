@@ -52,7 +52,6 @@ const helpers = {
 
   // Условные сравнения (блоковые хелперы)
   eq(a, b, options) {
-    // строгое сравнение
     if (a === b) {
       return options.fn(this);
     }
@@ -105,4 +104,25 @@ const helpers = {
     return (parseFloat(a) * parseInt(b, 10)).toFixed(2);
   },
 };
+
+export function range(start, end) {
+  const arr = [];
+  for (let i = start; i <= end; i++) {
+    arr.push(i);
+  }
+  return arr;
+}
+
+export function lte(a, b) {
+  return a <= b;
+}
+
+export function formatDate(dateString) {
+  if (!dateString) {
+    return "";
+  }
+  const options = { year: "numeric", month: "long", day: "numeric" };
+  return new Date(dateString).toLocaleDateString(undefined, options);
+}
+
 export default helpers;

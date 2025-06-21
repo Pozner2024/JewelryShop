@@ -282,26 +282,39 @@
 
 /* Стили для страницы О компании (about-content) */
 .about-content {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 32px 16px;
+  max-width: 850px;
+  margin: 2rem auto;
+  padding: 2.5rem 3rem;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
+
   h2 {
-    margin-top: 2em;
-    margin-bottom: 0.5em;
-    font-size: 1.6em;
-    color: #8d6e63;
+    font-family: $font-family-primary;
+    font-size: 2.2em;
     font-weight: 600;
+    color: $color-primary-dark;
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid $color-primary;
   }
-  ul {
-    margin: 1em 0 2em 1.5em;
-    list-style: disc inside;
-    color: #444;
-    font-size: 1.08em;
+
+  h3 {
+    font-family: $font-family-primary;
+    font-size: 1.5em;
+    font-weight: 600;
+    color: $color-text;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
   }
+
   p {
-    margin-bottom: 1.2em;
-    color: #333;
-    line-height: 1.7;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #555;
+    margin-bottom: 1.5rem;
   }
 }
 
@@ -438,5 +451,56 @@
   }
   .contacts-map {
     padding: 8px 2px 2px 2px;
+  }
+}
+
+/* Admin Edit Controls */
+.admin-edit-controls {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e9ecef;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+
+  .btn {
+    padding: 0.6rem 1.2rem;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  #edit-about-btn {
+    background-color: #f8f9fa;
+    color: #343a40;
+    border: 1px solid #dee2e6;
+    &:hover {
+      background-color: #e9ecef;
+    }
+  }
+
+  #save-about-btn {
+    background-color: $color-primary;
+    color: white;
+    &:hover {
+      background-color: $color-primary-dark;
+    }
+  }
+
+  #cancel-about-btn {
+    background-color: transparent;
+    color: #6c757d;
+    box-shadow: none;
+    &:hover {
+      background-color: #f8f9fa;
+    }
   }
 }

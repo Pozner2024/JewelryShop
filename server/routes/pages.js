@@ -9,6 +9,11 @@ import {
   getLikedProductIdsByUserId,
   getProductById,
   getCartItems,
+  getSalesData,
+  getReviewsByProductId,
+  getPageContent,
+  updatePageContent,
+  getAllUsers,
 } from "../modules/db.js";
 
 const router = Router();
@@ -40,7 +45,8 @@ router.get("/", async (req, res) => {
 });
 router.get("/catalog", async (req, res) => {
   try {
-    const products = await getAllProducts();
+    const allProducts = await getAllProducts();
+    const products = allProducts.slice(0, 6); // Limit to 6 products
     let likedProductIds = [];
     if (req.user) {
       likedProductIds = await getLikedProductIdsByUserId(req.user.id);
@@ -55,9 +61,30 @@ router.get("/catalog", async (req, res) => {
     res.status(500).send("Error loading catalog.");
   }
 });
-router.get("/about", (req, res) => {
-  res.render("about");
+router.get("/about", async (req, res) => {
+  try {
+    const content = await getPageContent("about");
+    res.render("about", { content });
+  } catch (error) {
+    console.error("Error fetching about page content:", error);
+    res.status(500).send("Error loading about page.");
+  }
 });
+
+router.post("/about/update", requireAuth, async (req, res) => {
+  if (req.user.role !== "admin") {
+    return res.status(403).send("Forbidden");
+  }
+  try {
+    const { content } = req.body;
+    await updatePageContent("about", content);
+    res.status(200).json({ message: "Content updated successfully" });
+  } catch (error) {
+    console.error("Error updating about page content:", error);
+    res.status(500).json({ message: "Failed to update content" });
+  }
+});
+
 router.get("/contacts", (req, res) => {
   res.render("contacts");
 });
@@ -65,6 +92,7 @@ router.get("/product/:id", async (req, res) => {
   try {
     const productId = req.params.id;
     const product = await getProductById(productId);
+    const reviews = await getReviewsByProductId(productId);
 
     if (!product) {
       return res.status(404).send("Product not found");
@@ -76,7 +104,38 @@ router.get("/product/:id", async (req, res) => {
       isLiked = likedProductIds.includes(parseInt(productId, 10));
     }
 
-    res.render("product", { product: { ...product, is_liked: isLiked } });
+    // Attempt to parse specifications, provide an empty object if it fails
+    let specifications = {};
+    try {
+      if (product.specifications) {
+        specifications =
+          typeof product.specifications === "string"
+            ? JSON.parse(product.specifications)
+            : product.specifications;
+      }
+    } catch (e) {
+      console.error("Failed to parse product specifications:", e);
+      // Keep specifications as an empty object
+    }
+
+    // Parse sizes attribute from product data
+    let sizes = [];
+    try {
+      if (product.sizes) {
+        sizes =
+          typeof product.sizes === "string"
+            ? JSON.parse(product.sizes)
+            : product.sizes;
+      }
+    } catch (e) {
+      console.error("Failed to parse product sizes:", e);
+      // Keep sizes as an empty array
+    }
+
+    res.render("product", {
+      product: { ...product, is_liked: isLiked, specifications, sizes },
+      reviews,
+    });
   } catch (error) {
     console.error("Error fetching product:", error);
     res.status(500).send("Error loading product page.");
@@ -101,10 +160,24 @@ router.get("/cart", requireAuth, async (req, res) => {
 
 router.get("/profile", requireAuth, async (req, res) => {
   try {
-    const likedProducts = await getLikedProductsByUserId(req.user.id);
-    res.render("profile", { user: req.user, likedProducts: likedProducts });
+    if (req.user.role === "admin") {
+      // For admins, show all users and all products
+      const allUsers = await getAllUsers();
+      const allProducts = await getAllProducts();
+      const salesData = await getSalesData();
+      res.render("profile", {
+        user: req.user,
+        users: allUsers,
+        products: allProducts,
+        sales: salesData,
+      });
+    } else {
+      // For regular users, show their liked products
+      const likedProducts = await getLikedProductsByUserId(req.user.id);
+      res.render("profile", { user: req.user, likedProducts: likedProducts });
+    }
   } catch (error) {
-    console.error("Error fetching liked products:", error);
+    console.error("Error loading profile page:", error);
     res.status(500).send("Error loading profile page.");
   }
 });
