@@ -56,6 +56,9 @@ webserver.set("views", viewsPath);
 // Compile SCSS on the fly
 webserver.use(sassMiddleware);
 
+const clientPublicDir = path.join(CLIENT_DIR, "public");
+webserver.use(express.static(clientPublicDir));
+
 // Serve static assets from client directory
 webserver.use(express.static(CLIENT_DIR, { index: false }));
 

@@ -13,11 +13,10 @@
       {{{content}}}
     </div>
 
-    <textarea id="about-content-editor" style="display: none;">
-      {{{content}}}
-    </textarea>
-
     {{#if isAdmin}}
+      <textarea id="about-content-editor" style="display: none;">
+        {{{content}}}
+      </textarea>
       <div class="admin-edit-controls">
         <button id="edit-about-btn" class="btn btn-secondary">Edit</button>
         <button

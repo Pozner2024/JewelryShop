@@ -79,7 +79,10 @@ router.get("/about", async (req, res) => {
       await updatePageContent("about", content);
     }
 
-    res.render("about", { content });
+    res.render("about", {
+      content,
+      isAdmin: req.user && req.user.role === "admin",
+    });
   } catch (error) {
     console.error("Error fetching about page content:", error);
     res.status(500).send("Error loading about page.");
