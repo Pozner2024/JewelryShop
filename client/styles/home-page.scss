@@ -65,12 +65,12 @@
 
 // Hero Section
 .hero {
-  background: linear-gradient(
-    90deg,
-    $color-primary-light 0%,
-    $color-white 100%
-  );
-  padding: $spacing-xxl 0 $spacing-xl 0;
+  background-color: #333; /* Fallback color */
+  background-image: url("/images/hero-background.jpg");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  padding: $spacing-xxxl 0;
   box-shadow: $shadow-sm;
   margin-bottom: $spacing-xxl;
 
@@ -89,14 +89,16 @@
   }
   &__title {
     font-size: $font-size-xxxl;
-    color: $color-primary-dark;
+    color: $color-white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     font-weight: $font-weight-bold;
     margin-bottom: $spacing-lg;
     line-height: 1.1;
   }
   &__subtitle {
     font-size: $font-size-xl;
-    color: $color-secondary-light;
+    color: $color-white;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
     margin-bottom: $spacing-xl;
     line-height: 1.3;
   }
@@ -138,31 +140,51 @@
   }
   &__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: $spacing-xl;
+    grid-template-columns: repeat(3, 1fr);
+
+    @media (max-width: 992px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 576px) {
+      grid-template-columns: 1fr;
+      gap: $spacing-lg;
+    }
   }
 }
 .category-card {
+  aspect-ratio: 2 / 3;
   background: $color-white;
   border-radius: $border-radius-lg;
   box-shadow: $shadow-sm;
-  padding: $spacing-lg $spacing-md;
   text-align: center;
   transition: box-shadow 0.2s, transform 0.2s;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
   &:hover {
     box-shadow: $shadow-md;
     transform: translateY(-4px) scale(1.03);
   }
   &__image {
-    margin-bottom: $spacing-md;
+    margin-bottom: 0;
+    flex-grow: 1;
+    min-height: 0;
   }
   &__img {
-    border-radius: $border-radius;
+    border-radius: 0;
     width: 100%;
-    max-width: 120px;
-    margin: 0 auto;
-    box-shadow: $shadow-sm;
+    height: 100%;
+    object-fit: cover;
+    margin: 0;
+    box-shadow: none;
+  }
+  &__content {
+    padding: $spacing-lg $spacing-md;
+    flex-shrink: 0;
   }
   &__title {
     font-size: $font-size-lg;
@@ -191,11 +213,8 @@
     text-align: center;
     font-weight: $font-weight-semibold;
   }
-  &__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: $spacing-xl;
-  }
+  /* Стили для __grid удалены, так как они теперь централизованно задаются 
+     через класс .products-grid в catalog-products-grid.scss */
 }
 .product-card {
   background: $color-white;

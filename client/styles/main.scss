@@ -227,55 +227,6 @@ ol {
   }
 }
 
-/* Hero Section */
-.hero {
-  background: linear-gradient(135deg, $color-gray-light 0%, $color-white 100%);
-  padding: $spacing-xxxl 0;
-}
-
-.hero__container {
-  max-width: $container-max-width;
-  margin: 0 auto;
-  padding: 0 $spacing-lg;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: $spacing-xxxl;
-  align-items: center;
-}
-
-.hero__content {
-  max-width: 500px;
-}
-
-.hero__title {
-  font-family: $font-family-primary;
-  font-size: $font-size-xxxl;
-  font-weight: $font-weight-bold;
-  line-height: $line-height-tight;
-  color: $color-secondary;
-  margin-bottom: $spacing-lg;
-}
-
-.hero__subtitle {
-  font-size: $font-size-lg;
-  color: $color-text-light;
-  margin-bottom: $spacing-xl;
-  line-height: $line-height-base;
-}
-
-.hero__image {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.hero__img {
-  width: 100%;
-  max-width: 500px;
-  border-radius: $border-radius-lg;
-  box-shadow: $shadow-lg;
-}
-
 /* Categories Section */
 .categories {
   padding: $spacing-xxxl 0;

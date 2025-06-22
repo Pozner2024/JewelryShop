@@ -168,7 +168,16 @@ export async function initDbPool() {
   return pool;
 }
 
-export async function getPool() {
+export function getDbPool() {
+  if (!pool) {
+    throw new Error("Database pool not initialized. Call initDbPool() first.");
+  }
+  return pool;
+}
+
+async function getPool() {
+  // This function is kept for backwards compatibility in this file,
+  // but getDbPool should be used externally.
   if (!pool) {
     await initDbPool();
   }

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { requireAuth } from "../modules/auth.js";
-import { addLike, removeLike, getPool } from "../modules/db.js";
+import { addLike, removeLike, getDbPool } from "../modules/db.js";
 
 const router = Router();
 
@@ -21,7 +21,7 @@ router.post("/toggle", async (req, res) => {
   try {
     // This logic is a bit simplistic. It attempts to remove a like, and if it fails (doesn't find a row), it adds one.
     // A better approach would be to check first, but this avoids a race condition.
-    const pool = await getPool();
+    const pool = getDbPool();
     const [rows] = await pool.query(
       "SELECT * FROM user_likes WHERE user_id = ? AND product_id = ?",
       [userId, productId]
