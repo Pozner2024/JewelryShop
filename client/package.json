@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -16,5 +17,8 @@
     "dotenv": "^16.0.0",
     "sass": "^1.89.2",
     "vite": "^6.3.5"
+  },
+  "dependencies": {
+    "tinymce": "^7.9.1"
   }
 }

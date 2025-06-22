@@ -63,7 +63,22 @@ router.get("/catalog", async (req, res) => {
 });
 router.get("/about", async (req, res) => {
   try {
-    const content = await getPageContent("about");
+    let content = await getPageContent("about");
+
+    // If no content, provide default text
+    if (!content) {
+      content = `
+        <h2>About Our Jewelry Shop</h2>
+        <p>Welcome to <strong>JewelryShop</strong>, where elegance meets craftsmanship. We believe that every piece of jewelry tells a story, and we are dedicated to helping you find the perfect piece to tell yours.</p>
+        <h3>Our Mission</h3>
+        <p>Our mission is to provide high-quality, handcrafted jewelry that celebrates life's special moments. From timeless classics to modern designs, each item in our collection is created with passion and precision.</p>
+        <h3>Our Story</h3>
+        <p>Founded in 2024, JewelryShop started as a small workshop with a big dream: to make beautiful jewelry accessible to everyone. Today, we are proud to have served thousands of happy customers who trust us for our quality, creativity, and commitment to excellence.</p>
+      `;
+      // Optionally, save this default content to the DB for future requests
+      await updatePageContent("about", content);
+    }
+
     res.render("about", { content });
   } catch (error) {
     console.error("Error fetching about page content:", error);

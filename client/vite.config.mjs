@@ -15,13 +15,12 @@ const serverPort = process.env.HTTP_PORT || 3000;
 
 export default defineConfig({
   root: resolve(__dirname),
-
   server: {
     port: 5173,
     proxy: {
       // Всё, что не ассет (styles/, scripts/, assets/ или index.html),
       // проксируем на Express
-      "^(?!/(styles/|scripts/|assets/|index.html$)).*": {
+      "^(?!/(styles/|scripts/|assets/|tinymce/|index.html$)).*": {
         target: `http://localhost:${serverPort}`,
         changeOrigin: true,
         rewrite: (path) => path,
