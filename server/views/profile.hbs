@@ -71,48 +71,32 @@
     </div>
 
     <div id="sales-section" class="admin-section" style="display: none;">
-      <h3>Sales Data</h3>
-      {{#if sales}}
+      <h3>Sales</h3>
+      {{#if purchases.length}}
         <table class="admin-table">
           <thead>
             <tr>
               <th>User</th>
-              <th>Purchased Products (In Cart)</th>
-              <th>Liked Products</th>
+              <th>Product</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Date</th>
             </tr>
           </thead>
           <tbody>
-            {{#each sales}}
+            {{#each purchases}}
               <tr>
-                <td>{{this.login}}<br />({{this.user_email}})</td>
-                <td>
-                  {{#if this.purchases.length}}
-                    <ul class="sales-list">
-                      {{#each this.purchases}}
-                        <li>{{this.name}} (Qty: {{this.quantity}}) - ${{this.price}}</li>
-                      {{/each}}
-                    </ul>
-                  {{else}}
-                    <p>No purchases.</p>
-                  {{/if}}
-                </td>
-                <td>
-                  {{#if this.likes.length}}
-                    <ul class="sales-list">
-                      {{#each this.likes}}
-                        <li>{{this.name}} - ${{this.price}}</li>
-                      {{/each}}
-                    </ul>
-                  {{else}}
-                    <p>No likes.</p>
-                  {{/if}}
-                </td>
+                <td>{{this.user_login}}</td>
+                <td>{{this.product_name}}</td>
+                <td>{{this.quantity}}</td>
+                <td>${{this.product_price}}</td>
+                <td>{{this.purchased_at}}</td>
               </tr>
             {{/each}}
           </tbody>
         </table>
       {{else}}
-        <p>No sales data available.</p>
+        <p>No sales yet.</p>
       {{/if}}
     </div>
   </div>

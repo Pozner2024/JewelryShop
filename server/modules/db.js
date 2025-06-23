@@ -151,6 +151,22 @@ async function createPageContentTable() {
   }
 }
 
+async function createPurchasesTable() {
+  const createTableSql = `
+    CREATE TABLE IF NOT EXISTS purchases (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      user_id INT NOT NULL,
+      product_id INT NOT NULL,
+      quantity INT NOT NULL,
+      purchased_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+      FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+    );
+  `;
+  await pool.query(createTableSql);
+  console.log("✓ 'purchases' table is ready.");
+}
+
 export async function initDbPool() {
   try {
     pool = await mysql.createPool(dbConfig);
@@ -160,6 +176,7 @@ export async function initDbPool() {
     await createCartTable();
     await createProductReviewsTable();
     await createPageContentTable();
+    await createPurchasesTable();
     console.log("✓ Database connection successful.");
   } catch (err) {
     console.error("Database initialization error:", err);
@@ -451,4 +468,33 @@ export async function updatePageContent(pageName, content) {
     "INSERT INTO page_content (page_name, content) VALUES (?, ?) ON DUPLICATE KEY UPDATE content = ?",
     [pageName, content, content]
   );
+}
+
+export async function isProductLikedByUser(userId, productId) {
+  const pool = await getPool();
+  const [rows] = await pool.query(
+    "SELECT 1 FROM user_likes WHERE user_id = ? AND product_id = ?",
+    [userId, productId]
+  );
+  return rows.length > 0;
+}
+
+export async function addPurchase(userId, productId, quantity) {
+  const pool = await getPool();
+  await pool.query(
+    "INSERT INTO purchases (user_id, product_id, quantity) VALUES (?, ?, ?)",
+    [userId, productId, quantity]
+  );
+}
+
+export async function getAllPurchases() {
+  const pool = await getPool();
+  const [rows] = await pool.query(
+    `SELECT p.*, u.login as user_login, pr.name as product_name, pr.price as product_price
+     FROM purchases p
+     JOIN users u ON p.user_id = u.id
+     JOIN products pr ON p.product_id = pr.id
+     ORDER BY p.purchased_at DESC`
+  );
+  return rows;
 }

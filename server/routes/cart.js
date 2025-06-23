@@ -5,6 +5,8 @@ import {
   addProductToCart,
   updateProductQuantityInCart,
   removeProductFromCart,
+  addPurchase,
+  clearCart,
 } from "../modules/db.js";
 
 const router = Router();
@@ -48,12 +50,10 @@ router.post("/add", async (req, res) => {
 router.put("/update", async (req, res) => {
   const { productId, quantity } = req.body;
   if (!productId || quantity === undefined) {
-    return res
-      .status(400)
-      .json({
-        success: false,
-        message: "Product ID and quantity are required.",
-      });
+    return res.status(400).json({
+      success: false,
+      message: "Product ID and quantity are required.",
+    });
   }
   if (quantity <= 0) {
     // If quantity is 0 or less, remove the item
@@ -63,12 +63,10 @@ router.put("/update", async (req, res) => {
       )
       .catch((error) => {
         console.error("Error updating cart:", error);
-        res
-          .status(500)
-          .json({
-            success: false,
-            message: "Server error while updating cart.",
-          });
+        res.status(500).json({
+          success: false,
+          message: "Server error while updating cart.",
+        });
       });
   }
   try {
@@ -95,12 +93,33 @@ router.delete("/remove", async (req, res) => {
     res.json({ success: true, message: "Product removed from cart." });
   } catch (error) {
     console.error("Error removing from cart:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while removing from cart.",
+    });
+  }
+});
+
+// POST /api/cart/checkout - Оформить покупку
+router.post("/checkout", async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const cartItems = await getCartItems(userId);
+    if (!cartItems.length) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Cart is empty." });
+    }
+    for (const item of cartItems) {
+      await addPurchase(userId, item.id, item.quantity);
+    }
+    await clearCart(userId);
+    res.json({ success: true, message: "Purchase completed." });
+  } catch (error) {
+    console.error("Error during checkout:", error);
     res
       .status(500)
-      .json({
-        success: false,
-        message: "Server error while removing from cart.",
-      });
+      .json({ success: false, message: "Server error during checkout." });
   }
 });
 

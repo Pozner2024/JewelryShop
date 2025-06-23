@@ -80,6 +80,36 @@ document.addEventListener("DOMContentLoaded", () => {
         updateCartItem(productId, newQuantity, target);
       }
     });
+
+    // --- Оформление заказа ---
+    const checkoutButton = cartPage.querySelector(
+      ".button--primary.button--full"
+    );
+    if (checkoutButton) {
+      checkoutButton.addEventListener("click", async (event) => {
+        event.preventDefault();
+        try {
+          const response = await fetch("/api/cart/checkout", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          });
+          const data = await response.json();
+          if (response.ok && data.success) {
+            cartPage.querySelector(
+              ".cart-content"
+            ).innerHTML = `<p class="cart-success-message">Thank you for your purchase!</p>`;
+            updateCartIconCount();
+          } else {
+            alert(data.message || "Checkout failed.");
+          }
+        } catch (error) {
+          alert("Checkout failed.");
+        }
+      });
+    }
   }
 
   async function updateCartItem(productId, quantity, inputElement) {
@@ -118,26 +148,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let subtotal = 0;
     allItems.forEach((item) => {
-      const price = parseFloat(
-        item.querySelector(".cart-item__price").textContent
-      );
+      // Убираем все символы кроме цифр и точки
+      let priceText = item.querySelector(".cart-item__price").textContent;
+      priceText = priceText.replace(/[^\d.\-]/g, "");
+      const price = parseFloat(priceText);
       const quantity = parseInt(
         item.querySelector(".quantity__input").value,
         10
       );
-      const itemTotal = price * quantity;
+      const itemTotal =
+        (isNaN(price) ? 0 : price) * (isNaN(quantity) ? 0 : quantity);
       item.querySelector(
         ".cart-item__total-price"
-      ).textContent = `${itemTotal.toFixed(2)} ₽`;
+      ).textContent = `$${itemTotal.toFixed(2)}`;
       subtotal += itemTotal;
     });
 
     document.querySelector(
       ".summary-subtotal"
-    ).textContent = `${subtotal.toFixed(2)} ₽`;
+    ).textContent = `$${subtotal.toFixed(2)}`;
     document.querySelector(
       ".summary-grand-total"
-    ).textContent = `${subtotal.toFixed(2)} ₽`;
+    ).textContent = `$${subtotal.toFixed(2)}`;
   }
 
   async function updateCartIconCount() {

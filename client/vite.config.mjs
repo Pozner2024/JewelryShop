@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
+import viteCompression from "vite-plugin-compression";
 
 // В ESM-модуле __dirname нужно вычислить так:
 const __filename = fileURLToPath(import.meta.url);
@@ -42,4 +43,5 @@ export default defineConfig({
       },
     },
   },
+  plugins: [viteCompression()],
 });

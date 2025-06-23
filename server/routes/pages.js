@@ -14,6 +14,7 @@ import {
   getPageContent,
   updatePageContent,
   getAllUsers,
+  getAllPurchases,
 } from "../modules/db.js";
 
 const router = Router();
@@ -179,15 +180,15 @@ router.get("/cart", requireAuth, async (req, res) => {
 router.get("/profile", requireAuth, async (req, res) => {
   try {
     if (req.user.role === "admin") {
-      // For admins, show all users and all products
+      // For admins, show all users, all products, and all purchases
       const allUsers = await getAllUsers();
       const allProducts = await getAllProducts();
-      const salesData = await getSalesData();
+      const purchases = await getAllPurchases();
       res.render("profile", {
         user: req.user,
         users: allUsers,
         products: allProducts,
-        sales: salesData,
+        purchases,
       });
     } else {
       // For regular users, show their liked products
