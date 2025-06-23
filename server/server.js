@@ -120,3 +120,5 @@ webserver.use("/", pagesRouter);
 webserver.listen(HTTP_PORT, () => {
   console.log(`HTTP listening on http://localhost:${HTTP_PORT}`);
 });
+
+export { webserver };
