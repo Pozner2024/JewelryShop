@@ -33,7 +33,13 @@ export default defineConfig({
     outDir: resolve(__dirname, "dist"),
     rollupOptions: {
       input: {
-        main: resolve(__dirname, "index.html"),
+        about: resolve(__dirname, "scripts/about.js"),
+        auth: resolve(__dirname, "scripts/auth.js"),
+        cart: resolve(__dirname, "scripts/cart.js"),
+        likes: resolve(__dirname, "scripts/likes.js"),
+        product: resolve(__dirname, "scripts/product.js"),
+        profile: resolve(__dirname, "scripts/profile.js"),
+        // index: resolve(__dirname, "index.html"), // можно оставить для dev-сервера
       },
       output: {
         // Добавляем content-hash в имена файлов для корректного кеширования
