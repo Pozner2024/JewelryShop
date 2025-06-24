@@ -21,9 +21,9 @@
             <span class="product-card__article">Art. {{this.article}}</span>
         </div>
         <div class="product-card__price-block">
-            <p class="product-card__price">${{this.price}}</p>
+            <p class="product-card__price">${{divide this.price 10}}</p>
             {{#if this.old_price}}
-            <p class="product-card__old-price">${{this.old_price}}</p>
+            <p class="product-card__old-price">${{divide this.old_price 10}}</p>
             {{/if}}
         </div>
         <div class="product-card__rating">

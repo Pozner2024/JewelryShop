@@ -62,9 +62,9 @@
           <span class="product-info__article">Art. {{product.article}}</span>
         </div>
         <div class="product-info__price-block">
-          <span class="product-info__price">{{product.price}} ₽</span>
+          <span class="product-info__price">${{divide product.price 10}}</span>
           {{#if product.old_price}}
-          <span class="product-info__old-price">{{product.old_price}} ₽</span>
+          <span class="product-info__old-price">${{divide product.old_price 10}}</span>
           {{/if}}
         </div>
         <div class="product-info__rating">

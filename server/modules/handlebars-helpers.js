@@ -103,6 +103,10 @@ const helpers = {
   multiply: function (a, b) {
     return (parseFloat(a) * parseInt(b, 10)).toFixed(2);
   },
+  divide: function (value, divisor) {
+    if (!value || !divisor) return 0;
+    return (parseFloat(value) / parseFloat(divisor)).toFixed(2);
+  },
 };
 
 export function range(start, end) {

@@ -2,6 +2,7 @@ import "./init-env.js";
 import { fileURLToPath } from "url";
 import path from "path";
 import session from "express-session";
+// import { helpers } from "./handlebars-helpers.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
