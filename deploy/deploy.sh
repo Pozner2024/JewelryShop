@@ -2,7 +2,7 @@
 
 # === Настройки ===
 APP_NAME="jewelryshop"
-PROJECT_DIR="/var/www/jewelryshop"
+PROJECT_DIR="/home/deploy/JewelryShop"
 BACKUP_DIR="/var/backups/jewelryshop"
 DATE=$(date +"%Y-%m-%d_%H-%M-%S")
 DB_NAME="your_db_name"   # <-- Укажите имя вашей БД
@@ -27,8 +27,8 @@ tar czf "$BACKUP_DIR/files_backup_$DATE.tar.gz" \
     "$PROJECT_DIR/server/modules" \
     "$PROJECT_DIR/server/routes"
 
-# === 5. Бэкап MongoDB ===
-mongodump --db "$DB_NAME" --out "$BACKUP_DIR/mongodump_$DATE"
+# === 5. Бэкап MariaDB ===
+mysqldump -u <user> -p<password> "$DB_NAME" > "$BACKUP_DIR/mariadb_backup_$DATE.sql"
 
 # === 6. Перезапустить приложение ===
 pm2 start server/server.js --name $APP_NAME
@@ -36,4 +36,6 @@ pm2 start server/server.js --name $APP_NAME
 # === 7. Сохранить состояние PM2 ===
 pm2 save
 
-echo "Deploy и бэкап завершены!" 
+echo "Deploy и бэкап завершены!"
+
+sudo systemctl reload nginx 

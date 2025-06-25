@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (urlParams.has("activated")) {
     const msgEl = document.getElementById("loginStatusMessage");
     if (msgEl) {
-      msgEl.textContent = "Аккаунт успешно активирован. Пожалуйста, войдите.";
+      msgEl.textContent = "Account successfully activated. Please sign in.";
       msgEl.className = "status-message success";
     }
     showModal(loginModal);
@@ -167,7 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     } catch (err) {
       const msgEl = document.getElementById("registerStatusMessage");
-      msgEl.textContent = "Ошибка сети. Пожалуйста, попробуйте позже.";
+      msgEl.textContent = "Network error. Please try again later.";
       msgEl.className = "status-message error";
     }
   });
@@ -200,7 +200,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     } catch (err) {
       const msgEl = document.getElementById("loginStatusMessage");
-      msgEl.textContent = "Ошибка сети. Пожалуйста, попробуйте позже.";
+      msgEl.textContent = "Network error. Please try again later.";
       msgEl.className = "status-message error";
     }
   });
@@ -234,9 +234,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const a = e.target.closest("a[href^='#']");
     if (a) {
       e.preventDefault();
-      document
-        .getElementById(a.getAttribute("href").slice(1))
-        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+      const anchorId = a.getAttribute("href").slice(1);
+      if (anchorId) {
+        document
+          .getElementById(anchorId)
+          ?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     }
   });
 

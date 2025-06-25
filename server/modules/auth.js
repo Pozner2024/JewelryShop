@@ -103,35 +103,33 @@ export async function register(req, res) {
 
     // Validation
     if (!login || !email || !password) {
-      return res
-        .status(400)
-        .json({ message: "Все поля обязательны для заполнения." });
+      return res.status(400).json({ message: "All fields are required." });
     }
 
     // Validate login
-    if (!/^[a-zA-Zа-яА-ЯёЁ0-9_-]{3,20}$/.test(login)) {
+    if (!/^[a-zA-Z0-9_-]{3,20}$/.test(login)) {
       return res.status(400).json({
         message:
-          "Логин должен быть длиной от 3 до 20 символов и может содержать буквы, цифры, знак подчеркивания или дефис",
+          "Login must be 3-20 characters and may contain letters, numbers, underscores or hyphens",
       });
     }
 
     // Validate email
     if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(email)) {
-      return res.status(400).json({ message: "Неверный формат email" });
+      return res.status(400).json({ message: "Invalid email format" });
     }
 
     // Validate password
     if (!/^\d{8}$/.test(password)) {
       return res
         .status(400)
-        .json({ message: "Пароль должен состоять ровно из 8 цифр" });
+        .json({ message: "Password must be exactly 8 digits" });
     }
 
     // Check if login exists
     const existingLogin = await findUserByLogin(login);
     if (existingLogin) {
-      return res.status(400).json({ message: "Этот логин уже занят" });
+      return res.status(400).json({ message: "This login is already taken" });
     }
 
     // Check if email exists
@@ -139,7 +137,7 @@ export async function register(req, res) {
     if (existingEmail) {
       return res
         .status(400)
-        .json({ message: "Этот email уже зарегистрирован" });
+        .json({ message: "This email is already registered" });
     }
 
     // Generate activation token
@@ -158,7 +156,7 @@ export async function register(req, res) {
     return res.status(200).json({
       success: true,
       message:
-        "Регистрация успешна! Пожалуйста, проверьте вашу почту для активации аккаунта.",
+        "Registration successful! Please check your email to activate your account.",
     });
   } catch (err) {
     console.error("Ошибка регистрации:", err);
@@ -172,7 +170,7 @@ export async function activate(req, res) {
     if (!token || !password) {
       return res.status(400).json({
         success: false,
-        message: "Отсутствует токен активации или пароль.",
+        message: "Activation token or password is missing.",
       });
     }
 
@@ -180,7 +178,7 @@ export async function activate(req, res) {
     if (!user) {
       return res.status(400).json({
         success: false,
-        message: "Недействительный токен активации.",
+        message: "Invalid activation token.",
       });
     }
 
@@ -193,7 +191,7 @@ export async function activate(req, res) {
     console.error("Ошибка активации:", err);
     return res.status(500).json({
       success: false,
-      message: "Ошибка сервера при активации.",
+      message: "Server error during activation.",
     });
   }
 }
@@ -202,9 +200,7 @@ export async function login(req, res) {
   try {
     const { loginOrEmail, password } = req.body;
     if (!loginOrEmail || !password) {
-      return res
-        .status(400)
-        .json({ message: "Все поля обязательны для заполнения." });
+      return res.status(400).json({ message: "All fields are required." });
     }
 
     const user = await findUserByLoginOrEmail(loginOrEmail);
@@ -212,7 +208,7 @@ export async function login(req, res) {
     if (!user) {
       return res
         .status(400)
-        .json({ message: "Неверный логин/email или пароль." });
+        .json({ message: "Invalid login/email or password." });
     }
 
     const match = await bcrypt.compare(password, user.password_hash);
@@ -220,13 +216,13 @@ export async function login(req, res) {
     if (!match) {
       return res
         .status(400)
-        .json({ message: "Неверный логин/email или пароль." });
+        .json({ message: "Invalid login/email or password." });
     }
 
     if (!user.is_active) {
       return res.status(400).json({
         message:
-          "Аккаунт не активирован. Пожалуйста, проверьте вашу почту и перейдите по ссылке для активации.",
+          "Account is not activated. Please check your email and follow the activation link.",
       });
     }
 
@@ -237,7 +233,7 @@ export async function login(req, res) {
 
     res.status(200).json({
       success: true,
-      message: "Вход выполнен успешно",
+      message: "Login successful",
       user: {
         login: user.login,
         email: user.user_email,
@@ -246,7 +242,7 @@ export async function login(req, res) {
     });
   } catch (err) {
     console.error("Ошибка при входе:", err);
-    res.status(500).json({ message: "Ошибка сервера при попытке входа." });
+    res.status(500).json({ message: "Server error during login attempt." });
   }
 }
 
