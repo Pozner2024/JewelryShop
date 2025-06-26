@@ -24,14 +24,12 @@ import pagesRouter from "./routes/pages.js";
 import likesRouter from "./routes/likes.js";
 import cartRouter from "./routes/cart.js";
 
-// === 1) Initialize database ===
+// --- Подключение к базе данных ---
 await initDbPool();
 
-// === 2) Create Express application ===
+// --- Создание экземпляра Express ---
 const webserver = express();
 
-// === 3) Configure Handlebars view engine ===
-// Определяем корневую папку для шаблонов: server/views
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const viewsPath = path.join(__dirname, "views");
@@ -52,21 +50,19 @@ webserver.engine(".hbs", hbs.engine);
 webserver.set("view engine", ".hbs");
 webserver.set("views", viewsPath);
 
-// === 4) Middleware ===
-// Compile SCSS on the fly
 webserver.use(sassMiddleware);
 
 const clientPublicDir = path.join(CLIENT_DIR, "public");
 webserver.use(express.static(clientPublicDir));
 
-// Serve static assets from client directory
+// Раздача статических файлов из директории клиента
 webserver.use(express.static(CLIENT_DIR, { index: false }));
 
-// Parse URL-encoded bodies and JSON
+// Парсинг URL-encoded и JSON тел запросов
 webserver.use(express.urlencoded({ extended: true }));
 webserver.use(express.json());
 
-// Session handling, supporting X-Session-Id header
+// Обработка сессий, поддержка заголовка X-Session-Id
 const sessionStore = new CustomSessionStore();
 webserver.use((req, res, next) => {
   const sid = req.headers["x-session-id"];
@@ -93,7 +89,7 @@ webserver.use(async (req, res, next) => {
           role: user.role,
         };
         res.locals.isAdmin = user.role === "admin";
-        req.user = user; // for requireAuth
+        req.user = user;
       }
     } catch (e) {
       console.error("Error fetching user for session:", e);
@@ -103,20 +99,17 @@ webserver.use(async (req, res, next) => {
   next();
 });
 
-// Legacy routes
+// --- Редиректы для SPA-маршрутов регистрации и логина ---
 webserver.get("/app", (_req, res) => res.redirect("/"));
 webserver.get("/register", (_req, res) => res.redirect("/?register=true"));
 webserver.get("/login", (_req, res) => res.redirect("/?login=true"));
 
-// === 6) Mount API routes ===
 webserver.use("/api/users", usersRoutes);
 webserver.use("/api/likes", likesRouter);
 webserver.use("/api/cart", cartRouter);
 
-// === 7) Mount pages routes ===
 webserver.use("/", pagesRouter);
 
-// === 8) Start HTTP server ===
 webserver.listen(HTTP_PORT, () => {
   console.log(`HTTP listening on http://localhost:${HTTP_PORT}`);
 });

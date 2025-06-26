@@ -24,7 +24,7 @@ const clientDir = path.join(__dirname, "../../client");
 
 router.get("/", async (req, res) => {
   try {
-    // Fetch all products and take the first 3 as featured
+    // Получить все продукты и взять первые 3 как избранные
     const allProducts = await getAllProducts();
     const featuredProducts = allProducts.slice(0, 3);
 
@@ -41,13 +41,13 @@ router.get("/", async (req, res) => {
     res.render("index", { featuredProducts: productsWithLikes });
   } catch (error) {
     console.error("Error fetching featured products:", error);
-    res.render("index", { featuredProducts: [] }); // Render page even if DB fails
+    res.render("index", { featuredProducts: [] }); // Рендерим страницу даже если БД недоступна
   }
 });
 router.get("/catalog", async (req, res) => {
   try {
     const allProducts = await getAllProducts();
-    const products = allProducts.slice(0, 6); // Limit to 6 products
+    const products = allProducts.slice(0, 6); // Ограничиваем до 6 товаров
     let likedProductIds = [];
     if (req.user) {
       likedProductIds = await getLikedProductIdsByUserId(req.user.id);
@@ -66,7 +66,7 @@ router.get("/about", async (req, res) => {
   try {
     let content = await getPageContent("about");
 
-    // If no content, provide default text
+    // Если нет контента, подставляем текст по умолчанию
     if (!content) {
       content = `
         <h2>About Our Jewelry Shop</h2>

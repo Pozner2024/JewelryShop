@@ -1,5 +1,7 @@
 @use "variables" as *;
 
+// --- Базовые компоненты и утилиты ---
+
 /* Специфичные стили для страниц с контентом */
 .content-page {
   body {
@@ -112,5 +114,36 @@
 
   &--show {
     display: block;
+  }
+  .header__profile-container {
+    position: relative;
+  }
+
+  .profile-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 110%;
+    background: #fff;
+    border: 1px solid #ccc;
+    z-index: 9999;
+    min-width: 160px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px 0;
+    border-radius: 6px;
+  }
+  .profile-dropdown.show {
+    left: 0;
+    right: auto;
+    top: 40px;
+  }
+  .profile-dropdown a {
+    display: block;
+    padding: 8px 20px;
+    color: #333;
+    text-decoration: none;
+  }
+  .profile-dropdown a:hover {
+    background: #f5f5f5;
   }
 }

@@ -1,6 +1,7 @@
 // client/scripts/product.js
+// --- Скрипт для страницы товара: выбор размера, количества и т.д. ---
 document.addEventListener("DOMContentLoaded", () => {
-  // Size selection
+  // --- Выбор размера ---
   const sizeButtons = document.querySelectorAll(".size-btn");
   if (sizeButtons.length > 0) {
     sizeButtons.forEach((button) => {
@@ -11,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Quantity selection
+  // --- Выбор количества ---
   const quantityBlock = document.querySelector(".quantity");
   if (quantityBlock) {
     const minusBtn = quantityBlock.querySelector(".quantity__btn--minus");

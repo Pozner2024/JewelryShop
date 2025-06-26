@@ -1,7 +1,8 @@
+// --- Скрипт для страницы профиля/админки ---
 document.addEventListener("DOMContentLoaded", () => {
   const adminDashboard = document.querySelector(".admin-dashboard");
   if (!adminDashboard) {
-    return; // Not on admin profile page, do nothing.
+    return; // Не на странице профиля администратора, ничего не делать.
   }
 
   const navButtons = adminDashboard.querySelectorAll(".admin-nav-btn");
@@ -9,16 +10,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   navButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      // Deactivate all buttons and hide all sections
+      // Деактивировать все кнопки и скрыть все секции
       navButtons.forEach((btn) => btn.classList.remove("active"));
       sections.forEach((section) => {
         section.style.display = "none";
       });
 
-      // Activate the clicked button
+      // Активировать нажатую кнопку
       button.classList.add("active");
 
-      // Show the target section
+      // Показать целевую секцию
       const targetId = button.dataset.target;
       const targetSection = adminDashboard.querySelector(`#${targetId}`);
       if (targetSection) {

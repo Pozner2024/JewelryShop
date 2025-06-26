@@ -1,5 +1,4 @@
-// server/modules/handlebars-helpers.js
-
+// --- Хелперы для Handlebars (вспомогательные функции для шаблонов) ---
 const helpers = {
   // Повторяет блок n раз. Внутри блока можно использовать {{@index}} для доступа к индексу.
   times(n, options) {
@@ -16,7 +15,7 @@ const helpers = {
     return accum;
   },
 
-  // Арифметика
+  // Арифметика (сложение)
   add(a, b) {
     const aNum = Number(a);
     const bNum = Number(b);
@@ -25,6 +24,7 @@ const helpers = {
     }
     return aNum + bNum;
   },
+  // Арифметика (вычитание)
   subtract(a, b) {
     const aNum = Number(a);
     const bNum = Number(b);
@@ -33,7 +33,7 @@ const helpers = {
     }
     return aNum - bNum;
   },
-  // minus дублирует subtract, можно оставить или убрать
+  // minus дублирует subtract
   minus(a, b) {
     const aNum = Number(a);
     const bNum = Number(b);
@@ -42,6 +42,7 @@ const helpers = {
     }
     return aNum - bNum;
   },
+  // Инкремент
   inc(value) {
     const num = parseInt(value, 10);
     if (isNaN(num)) {
@@ -50,7 +51,7 @@ const helpers = {
     return num + 1;
   },
 
-  // Условные сравнения (блоковые хелперы)
+  // Условные сравнения (блочные хелперы)
   eq(a, b, options) {
     if (a === b) {
       return options.fn(this);
@@ -73,7 +74,6 @@ const helpers = {
     }
     return options.inverse(this);
   },
-  // Можно добавить другие сравнения по необходимости
 
   // Форматирование и утилиты
   formatPrice(price) {
@@ -82,21 +82,14 @@ const helpers = {
     // Добавляем пробелы между тысячами, если это число
     return str.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   },
+  // Блоковый хелпер: если совпадают пути, рендерит options.fn, иначе options.inverse
   isActive(currentPath, targetPath, options) {
-    // Блоковый хелпер: если совпадают пути, рендерит options.fn, иначе options.inverse
     if (currentPath === targetPath) {
       return options.fn(this);
     }
     return options.inverse(this);
   },
 
-  // Пример хелпера для генерации ссылки с активным классом (необязательно)
-  // activeLink(currentPath, targetPath, options) {
-  //   const activeClass = (currentPath === targetPath) ? 'active' : '';
-  //   return `<a href="${targetPath}" class="${activeClass}">${options.fn(this)}</a>`;
-  // },
-
-  // Добавьте здесь другие хелперы по потребности...
   json: function (context) {
     return JSON.stringify(context);
   },
@@ -109,6 +102,7 @@ const helpers = {
   },
 };
 
+// --- Вспомогательная функция для генерации диапазона чисел ---
 export function range(start, end) {
   const arr = [];
   for (let i = start; i <= end; i++) {

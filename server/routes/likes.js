@@ -9,10 +9,10 @@ import {
 
 const router = Router();
 
-// Middleware to ensure user is authenticated for all like routes
+// Промежуточное ПО для проверки авторизации пользователя для всех маршрутов лайков
 router.use(requireAuth);
 
-// Toggle like status for a product
+// Переключить статус лайка для товара
 router.post("/toggle", async (req, res) => {
   const { productId } = req.body;
   const userId = req.user.id;

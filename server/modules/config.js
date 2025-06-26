@@ -8,6 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const requireEnv = (name) => {
+  // --- Проверка наличия переменной окружения ---
   const v = process.env[name];
   if (!v) {
     throw new Error(
@@ -22,30 +23,31 @@ export const WS_PORT = parseInt(process.env.WS_PORT || "3001");
 export const CLIENT_DIR = path.join(__dirname, "..", "..", "client");
 export const UPLOAD_DIR = path.join(__dirname, "..", "uploads");
 
-// Конфигурация базы данных
-// export const dbConfig = {
-//   host: "127.0.0.1",
-//   port: 3306,
-//   user: "root",
-//   password: "",
-//   database: "jewelryshop",
-//   waitForConnections: true,
-
-//   connectionLimit: 10,
-//   queueLimit: 0,
-// };
-
+// --- Конфигурация базы данных ---
 export const dbConfig = {
-  host: requireEnv("DB_HOST"),
-  port: parseInt(requireEnv("DB_PORT")),
-  user: requireEnv("DB_USER"),
-  password: requireEnv("DB_PASSWORD"),
-  database: requireEnv("DB_NAME"),
+  host: "127.0.0.1",
+  port: 3306,
+  user: "root",
+  password: "",
+  database: "jewelryshop",
   waitForConnections: true,
-  connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT || "10"),
-  queueLimit: parseInt(process.env.DB_QUEUE_LIMIT || "0"),
+
+  connectionLimit: 10,
+  queueLimit: 0,
 };
 
+// export const dbConfig = {
+//   host: requireEnv("DB_HOST"),
+//   port: parseInt(requireEnv("DB_PORT")),
+//   user: requireEnv("DB_USER"),
+//   password: requireEnv("DB_PASSWORD"),
+//   database: requireEnv("DB_NAME"),
+//   waitForConnections: true,
+//   connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT || "10"),
+//   queueLimit: parseInt(process.env.DB_QUEUE_LIMIT || "0"),
+// };
+
+// --- Конфигурация почты ---
 export const emailConfig = {
   host: requireEnv("EMAIL_HOST"),
   port: parseInt(requireEnv("EMAIL_PORT")),
@@ -80,6 +82,7 @@ export class CustomSessionStore extends Store {
   }
 }
 
+// --- Конфигурация сессий ---
 export const sessionConfig = {
   store: new CustomSessionStore(),
   secret: requireEnv("SESSION_SECRET"),

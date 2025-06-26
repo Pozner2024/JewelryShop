@@ -1,5 +1,6 @@
-// client/scripts/auth.js
+// --- Скрипт авторизации и регистрации пользователя ---
 document.addEventListener("DOMContentLoaded", () => {
+  // --- Получение элементов DOM ---
   const urlParams = new URLSearchParams(window.location.search);
   const profileBtn = document.getElementById("profileBtn");
   const loginModal = document.getElementById("loginModal");
@@ -20,8 +21,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const profileDropdownBtn = document.getElementById("profileDropdownBtn");
   const profileDropdown = document.getElementById("profileDropdown");
 
+  // --- Обработчик выпадающего меню профиля ---
   if (profileDropdownBtn) {
+    console.log("Навешиваю обработчик на profileDropdownBtn");
     profileDropdownBtn.addEventListener("click", (event) => {
+      console.log("Клик по иконке профиля!");
       event.stopPropagation();
       profileDropdown.classList.toggle("show");
     });
@@ -37,15 +41,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Handle account activation
+  // --- Обработка активации аккаунта через ссылку ---
   if (urlParams.has("activated")) {
     const msgEl = document.getElementById("loginStatusMessage");
     if (msgEl) {
-      msgEl.textContent = "Account successfully activated. Please sign in.";
+      msgEl.textContent = "Account successfully activated. Please log in.";
       msgEl.className = "status-message success";
     }
     showModal(loginModal);
-    // Remove the query parameter from the URL
+    // Удаляем параметр из URL
     const newUrl =
       window.location.protocol +
       "//" +
@@ -54,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.history.pushState({ path: newUrl }, "", newUrl);
   }
 
-  // Open login modal if url has ?login=true
+  // --- Открытие модального окна входа, если есть ?login=true ---
   if (urlParams.has("login")) {
     const loginOrEmailField = document.querySelector(
       '#loginForm input[name="loginOrEmail"]'
@@ -66,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
     showModal(loginModal);
   }
 
-  // Open login window if not logged in
+  // --- Открытие окна входа, если пользователь не авторизован ---
   if (profileBtn) {
     profileBtn.addEventListener("click", (e) => {
       e.preventDefault();
@@ -74,6 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // --- Переключение отображения меню пользователя ---
   function toggleUserMenu() {
     if (!userMenu) return;
     const isHidden =
@@ -89,17 +94,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // --- Показать модальное окно ---
   function showModal(modal) {
     modal.classList.add("show");
     document.body.style.overflow = "hidden";
   }
 
+  // --- Скрыть модальное окно ---
   function hideModal(modal) {
     modal.classList.remove("show");
     document.body.style.overflow = "auto";
   }
 
-  // Закрытие модалей
+  // --- Закрытие модальных окон ---
   closeLoginModal?.addEventListener("click", () => hideModal(loginModal));
   closeRegisterModal?.addEventListener("click", () => hideModal(registerModal));
   loginModal?.addEventListener(
@@ -121,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
     showModal(loginModal);
   });
 
-  // Функция обновления UI по статусу
+  // --- Обновление интерфейса в зависимости от статуса авторизации ---
   function updateAuthInterface(isLoggedIn, userData = null) {
     const usernameDisplay = document.getElementById("usernameDisplay");
     if (isLoggedIn && userData) {
@@ -131,13 +138,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // --- Проверка статуса авторизации пользователя ---
   function checkAuthStatus() {
     const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
     const userData = JSON.parse(localStorage.getItem("userData") || "null");
     updateAuthInterface(isLoggedIn, userData);
   }
 
-  // Registration form submission
+  // --- Обработка отправки формы регистрации ---
   registerForm?.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(registerForm);
@@ -163,7 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (response.ok) {
         registerForm.reset();
         msgEl.textContent =
-          "Please check your email and follow the activation link";
+          "Check your email and follow the link to activate your account";
       }
     } catch (err) {
       const msgEl = document.getElementById("registerStatusMessage");
@@ -172,7 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Login form submission
+  // --- Обработка отправки формы входа ---
   loginForm?.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(loginForm);
@@ -205,7 +213,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Добавляем токен в заголовки всех запросов fetch
+  // --- Добавление токена в заголовки всех fetch-запросов ---
   const originalFetch = window.fetch;
   window.fetch = (input, init = {}) => {
     const token = localStorage.getItem("token");
@@ -216,7 +224,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return originalFetch(input, init);
   };
 
-  // Logout
+  // --- Обработка выхода пользователя ---
   logoutBtn?.addEventListener("click", async (e) => {
     e.preventDefault();
     try {
@@ -229,7 +237,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Плавная прокрутка якорей
+  // --- Плавная прокрутка к якорям ---
   document.addEventListener("click", (e) => {
     const a = e.target.closest("a[href^='#']");
     if (a) {
@@ -243,7 +251,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Переключатель видимости пароля
+  // --- Переключатель видимости пароля ---
   const toggles = document.querySelectorAll(".password-toggle");
   toggles.forEach((toggle) => {
     toggle.addEventListener("click", function () {

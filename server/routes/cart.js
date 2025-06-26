@@ -11,10 +11,10 @@ import {
 
 const router = Router();
 
-// All cart routes require a logged-in user
+// Все маршруты корзины требуют авторизации пользователя
 router.use(requireAuth);
 
-// GET /api/cart - Get all items in the cart
+// GET /api/cart - Получить все товары в корзине
 router.get("/", async (req, res) => {
   try {
     const cartItems = await getCartItems(req.user.id);
@@ -27,7 +27,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// POST /api/cart/add - Add a product to the cart
+// POST /api/cart/add - Добавить товар в корзину
 router.post("/add", async (req, res) => {
   const { productId, quantity = 1 } = req.body;
   if (!productId) {
@@ -46,7 +46,7 @@ router.post("/add", async (req, res) => {
   }
 });
 
-// PUT /api/cart/update - Update product quantity
+// PUT /api/cart/update - Обновить количество товара
 router.put("/update", async (req, res) => {
   const { productId, quantity } = req.body;
   if (!productId || quantity === undefined) {
@@ -56,7 +56,7 @@ router.put("/update", async (req, res) => {
     });
   }
   if (quantity <= 0) {
-    // If quantity is 0 or less, remove the item
+    // Если количество 0 или меньше — удалить товар
     return removeProductFromCart(req.user.id, productId)
       .then(() =>
         res.json({ success: true, message: "Product removed from cart." })
@@ -80,7 +80,7 @@ router.put("/update", async (req, res) => {
   }
 });
 
-// DELETE /api/cart/remove - Remove a product from the cart
+// DELETE /api/cart/remove - Удалить товар из корзины
 router.delete("/remove", async (req, res) => {
   const { productId } = req.body;
   if (!productId) {

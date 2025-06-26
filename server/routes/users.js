@@ -10,6 +10,8 @@ import {
 
 const router = Router();
 
+// --- Роуты для пользователей (регистрация, вход, выход и т.д.) ---
+
 // POST   /api/users/register
 router.post("/register", register);
 

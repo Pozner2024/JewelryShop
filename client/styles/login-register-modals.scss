@@ -1,5 +1,7 @@
 @use "variables" as *;
 
+// --- Стили для модальных окон авторизации и регистрации ---
+
 /* Модальные окна */
 .modal {
   display: none;
@@ -14,7 +16,7 @@
   justify-content: center;
 
   &.show {
-    display: flex !important;
+    display: flex;
   }
 
   .modal__content {

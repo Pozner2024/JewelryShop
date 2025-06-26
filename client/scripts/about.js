@@ -1,9 +1,11 @@
+// --- Скрипт для страницы "О нас" (редактирование контента админом) ---
 document.addEventListener("DOMContentLoaded", () => {
   const displayDiv = document.getElementById("about-content-display");
   const editButton = document.getElementById("edit-about-btn");
   const saveButton = document.getElementById("save-about-btn");
   const cancelButton = document.getElementById("cancel-about-btn");
 
+  // --- Показать редактор ---
   function showEditor() {
     const editor = tinymce.get("about-content-editor");
     if (editor) {
@@ -15,6 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     cancelButton.style.display = "inline-block";
   }
 
+  // --- Скрыть редактор ---
   function hideEditor() {
     const editor = tinymce.get("about-content-editor");
     if (editor) {
@@ -26,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     cancelButton.style.display = "none";
   }
 
+  // --- Обработка кнопки "Редактировать" ---
   if (editButton) {
     editButton.addEventListener("click", () => {
       const editor = tinymce.get("about-content-editor");
@@ -48,12 +52,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // --- Обработка кнопки "Отмена" ---
   if (cancelButton) {
     cancelButton.addEventListener("click", () => {
       hideEditor();
     });
   }
 
+  // --- Обработка кнопки "Сохранить" ---
   if (saveButton) {
     saveButton.addEventListener("click", async () => {
       const editor = tinymce.get("about-content-editor");

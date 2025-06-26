@@ -1,3 +1,4 @@
+// --- Стили для страницы профиля пользователя и админки ---
 .profile-container {
   max-width: 1200px;
   margin: 2rem auto;
@@ -183,4 +184,21 @@
     list-style: disc;
     padding-left: 20px;
   }
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  z-index: 100;
+}
+.dropdown-menu.show {
+  display: block;
+}
+.profile-icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
 }

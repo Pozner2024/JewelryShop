@@ -1,5 +1,6 @@
+// --- Скрипт для корзины: добавление, обновление, оформление заказа ---
 document.addEventListener("DOMContentLoaded", () => {
-  // --- Global "Add to Cart" Logic ---
+  // --- Глобальная логика "Добавить в корзину" ---
   document.body.addEventListener("click", async (event) => {
     const addToCartButton = event.target.closest(
       ".product-card__btn, .product-info__btn-cart"
@@ -46,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // --- Cart Page Specific Logic ---
+  // --- Логика для страницы корзины ---
   const cartPage = document.querySelector(".cart-page");
   if (cartPage) {
     const cartItemsContainer = cartPage.querySelector(".cart-items");
@@ -112,6 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // --- Функция обновления товара в корзине ---
   async function updateCartItem(productId, quantity, inputElement) {
     try {
       const response = await fetch("/api/cart/update", {
@@ -137,6 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // --- Функция обновления итоговой суммы корзины ---
   function updateCartSummary() {
     const allItems = document.querySelectorAll(".cart-item");
     if (allItems.length === 0) {
@@ -172,6 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ).textContent = `$${subtotal.toFixed(2)}`;
   }
 
+  // --- Функция обновления иконки корзины ---
   async function updateCartIconCount() {
     try {
       const response = await fetch("/api/cart");
@@ -188,6 +192,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Initial update on page load
+  // --- Первичное обновление при загрузке страницы ---
   updateCartIconCount();
 });

@@ -21,7 +21,7 @@ async function createProductsTable() {
   await pool.query(createTableSql);
   console.log("✓ 'products' table is ready.");
 
-  // Add mock data if table is empty
+  // Добавить тестовые данные, если таблица пуста
   const [rows] = await pool.query("SELECT COUNT(*) as count FROM products");
   if (rows[0].count === 0) {
     const insertSql = `
@@ -49,9 +49,7 @@ async function createLikesTable() {
             FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
         );
     `;
-  // Note: A foreign key to a products table is missing as there is no products table yet.
-  // If a products table is added, a foreign key should be added:
-  // FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+
   await pool.query(createTableSql);
   console.log("✓ 'user_likes' table is ready.");
 }
@@ -193,8 +191,8 @@ export function getDbPool() {
 }
 
 async function getPool() {
-  // This function is kept for backwards compatibility in this file,
-  // but getDbPool should be used externally.
+  // Эта функция оставлена для обратной совместимости в этом файле,
+
   if (!pool) {
     await initDbPool();
   }
@@ -294,8 +292,6 @@ export async function activateUserAndSetPassword(email, passwordHash) {
   );
 }
 
-// === Cart Functions ===
-
 export async function getCartItems(userId) {
   const pool = await getPool();
   const [rows] = await pool.query(
@@ -310,7 +306,6 @@ export async function getCartItems(userId) {
 
 export async function addProductToCart(userId, productId, quantity) {
   const pool = await getPool();
-  // Use INSERT ... ON DUPLICATE KEY UPDATE to either add the product or update its quantity
   const sql = `
         INSERT INTO user_cart (user_id, product_id, quantity)
         VALUES (?, ?, ?)
@@ -394,9 +389,7 @@ export async function removeLike(userId, productId) {
 
 export async function getLikedProductsByUserId(userId) {
   const pool = await getPool();
-  // This query assumes a 'products' table exists.
-  // Since it doesn't, this will fail. I will need to mock product data or create the table.
-  // For now, I will write the query as if 'products' table exists.
+
   const [rows] = await pool.query(
     `SELECT p.* FROM products p
          JOIN user_likes ul ON p.id = ul.product_id
@@ -445,7 +438,6 @@ export async function getAllUsers() {
 }
 
 export async function getSalesData() {
-  // This is a placeholder for a real sales data query
   return [
     { month: "January", sales: 150000 },
     { month: "February", sales: 180000 },

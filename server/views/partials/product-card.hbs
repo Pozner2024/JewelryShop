@@ -1,37 +1,48 @@
+{{!-- Карточка товара, содержит id для JS-обработки --}}
 <div class="product-card" data-product-id="{{this.id}}">
+    {{!-- Блок изображения товара и wishlist (избранное) --}}
     <div class="product-card__image">
         <a href="/product/{{this.id}}">
             <img src="{{this.image_url}}" alt="{{this.name}}" class="product-card__img" />
         </a>
+        {{!-- Кнопка добавления в избранное, активна если товар уже в избранном --}}
         <button class="product-card__wishlist {{#if this.is_liked}}liked{{/if}}">
             <img src="/images/heart-icon.svg" alt="Add to Wishlist" class="product-card__heart" />
         </button>
+        {{!-- Если у товара есть бейдж (например, "Новинка" или "Скидка"), он отображается --}}
         {{#if this.badge}}
         <div class="product-card__badges">
             <span class="badge badge--{{this.badge.type}}">{{this.badge.text}}</span>
         </div>
         {{/if}}
     </div>
+    {{!-- Контент карточки: название, бренд, артикул, цена, рейтинг, кнопки --}}
     <div class="product-card__content">
+        {{!-- Название товара, ведёт на страницу товара --}}
         <h3 class="product-card__title">
             <a href="/product/{{this.id}}">{{this.name}}</a>
         </h3>
+        {{!-- Метаданные: бренд и артикул --}}
         <div class="product-card__meta">
             <span class="product-card__brand">{{this.brand}}</span>
             <span class="product-card__article">Art. {{this.article}}</span>
         </div>
+        {{!-- Блок цен: текущая цена и (если есть) старая цена --}}
         <div class="product-card__price-block">
             <p class="product-card__price">${{divide this.price 10}}</p>
             {{#if this.old_price}}
             <p class="product-card__old-price">${{divide this.old_price 10}}</p>
             {{/if}}
         </div>
+        {{!-- Блок рейтинга (пока пустой, для будущей реализации) --}}
         <div class="product-card__rating">
-            <!-- Rating logic can be added here if available -->
+           
         </div>
+        {{!-- Кнопка добавления в корзину --}}
         <button class="product-card__btn button button--secondary">
             Add to Cart
         </button>
+        {{!-- Кнопка удаления из избранного, показывается только если showRemoveButton == true --}}
         {{#if showRemoveButton}}
         <button class="product-card__btn-remove button button--tertiary">
             Remove from Favorites

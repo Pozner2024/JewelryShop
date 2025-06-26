@@ -1,5 +1,6 @@
+// --- Скрипт для лайков/избранного ---
 document.addEventListener("DOMContentLoaded", () => {
-  // Attach the event listener to the document to handle clicks on any page
+  // --- Глобальный обработчик кликов по лайкам и удалению из избранного ---
   document.body.addEventListener("click", async (event) => {
     const wishlistButton = event.target.closest(".product-card__wishlist");
     const removeButton = event.target.closest(".product-card__btn-remove");
@@ -25,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Handle remove button click (only on profile page)
+    // --- Логика для кнопки удаления из избранного (только на странице профиля) ---
     if (removeButton) {
       try {
         const response = await fetch("/api/likes/toggle", {
@@ -49,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return; // Stop execution after handling remove
     }
 
-    // --- Logic for Wishlist Heart Icon ---
+    // --- Логика для иконки "сердце" (wishlist) ---
     const profileDropdown = document.getElementById("profileDropdown");
     if (!profileDropdown) {
       const loginModal = document.getElementById("loginModal");
