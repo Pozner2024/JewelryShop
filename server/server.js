@@ -56,6 +56,9 @@ webserver.use(sassMiddleware);
 const clientPublicDir = path.join(CLIENT_DIR, "public");
 webserver.use(express.static(clientPublicDir));
 
+// Раздача изображений из client/images по пути /images
+webserver.use("/images", express.static(path.join(CLIENT_DIR, "images")));
+
 // Раздача статических файлов из директории клиента
 webserver.use(express.static(CLIENT_DIR, { index: false }));
 

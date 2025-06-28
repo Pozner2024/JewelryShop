@@ -167,6 +167,18 @@ router.get("/product/:id", async (req, res) => {
       return res.status(404).send("Product not found");
     }
 
+    // Корректно парсим images
+    try {
+      product.images =
+        typeof product.images === "string"
+          ? JSON.parse(product.images)
+          : Array.isArray(product.images)
+          ? product.images
+          : [];
+    } catch (e) {
+      product.images = [];
+    }
+
     let isLiked = false;
     if (req.user) {
       const likedProductIds = await getLikedProductIdsByUserId(req.user.id);

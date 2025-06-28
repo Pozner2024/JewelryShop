@@ -92,14 +92,15 @@
   document.createElement('img'); img.src = URL.createObjectURL(input.files[0]);
   img.style.maxWidth = '100px'; img.style.margin = '0 8px 8px 0';
   previewContainer.appendChild(img); } }); } function setMainImage(url) {
-  document.getElementById('mainProductImage').src = url; }
+  document.getElementById('mainProductImage').src = url; } window.setMainImage =
+  setMainImage;
 </script>
 
 <div class="product-gallery">
   <div class="product-gallery__main">
     <img
       id="mainProductImage"
-      src="{{getFirstImage this.images this.image_url}}"
+      src="{{getFirstImage this.images}}"
       alt="Main product image"
     />
   </div>
@@ -120,6 +121,7 @@
   .image-preview__item.dragging { opacity: 0.5; }
 </style>
 
-export function getFirstImage(images, image_url) { try { const arr = typeof
-images === 'string' ? JSON.parse(images) : images; return arr && arr.length ?
-arr[0] : (image_url || ''); } catch (e) { return image_url || ''; } }
+<script>
+  window.setMainImage = function(url) {
+  document.getElementById('mainProductImage').src = url; };
+</script>
