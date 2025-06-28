@@ -1,0 +1,8 @@
+<h1>Edit Product</h1>
+<form action="/admin/products/{{product.id}}/edit" method="POST">
+  <input name="name" value="{{product.name}}" required />
+  <input name="price" value="{{divide product.price 10}}" required />
+  <textarea name="description">{{product.description}}</textarea>
+  <!-- и другие поля -->
+  <button type="submit">Save</button>
+</form>

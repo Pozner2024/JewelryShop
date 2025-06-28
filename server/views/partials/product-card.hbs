@@ -3,7 +3,7 @@
     {{!-- Блок изображения товара и wishlist (избранное) --}}
     <div class="product-card__image">
         <a href="/product/{{this.id}}">
-            <img src="{{this.image_url}}" alt="{{this.name}}" class="product-card__img" />
+            <img src="{{getFirstImage this.images this.image_url}}" alt="{{this.name}}" class="product-card__img" />
         </a>
         {{!-- Кнопка добавления в избранное, активна если товар уже в избранном --}}
         <button class="product-card__wishlist {{#if this.is_liked}}liked{{/if}}">

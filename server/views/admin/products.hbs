@@ -1,0 +1,125 @@
+<h1>Admin: Products</h1>
+<a href="/admin/products/new">Add Product</a>
+<ul>
+  {{#each products}}
+    <li>
+      {{this.name}}
+      — ${{divide this.price 10}}
+      <a href="/admin/products/{{this.id}}/edit">Edit</a>
+      <form
+        action="/admin/products/{{this.id}}/delete"
+        method="POST"
+        style="display:inline;"
+      >
+        <button type="submit">Delete</button>
+      </form>
+    </li>
+  {{/each}}
+</ul>
+
+<div class="form-row">
+  <label>Description:<br />
+    <textarea name="description"></textarea>
+  </label>
+</div>
+
+<div class="form-row">
+  <label>Main Image:<br /><input
+      type="file"
+      name="images"
+      accept="image/*"
+    /></label>
+  <label>Image 2:<br /><input
+      type="file"
+      name="images"
+      accept="image/*"
+    /></label>
+  <label>Image 3:<br /><input
+      type="file"
+      name="images"
+      accept="image/*"
+    /></label>
+  <label>Image 4:<br /><input
+      type="file"
+      name="images"
+      accept="image/*"
+    /></label>
+</div>
+<div id="image-preview" class="image-preview"></div>
+
+<script>
+  const addProductForm = document.getElementById("addProductForm");
+  addProductForm.addEventListener("submit", async function (e) {
+  e.preventDefault(); const formData = new FormData(addProductForm); //
+  ...добавьте остальные текстовые поля, как раньше... // Отправляем форму с
+  файлами const response = await fetch("/admin/products/new", { method: "POST",
+  body: formData, // НЕ указывайте Content-Type, browser сам выставит boundary!
+  }); // ...обработка ответа... }); const imageInputs =
+  document.querySelectorAll('input[type="file"][name="images"]'); const
+  previewContainer = document.getElementById('image-preview');
+  imageInputs.forEach(input => { input.addEventListener('change', function() {
+  previewContainer.innerHTML = ''; imageInputs.forEach(fileInput => { if
+  (fileInput.files[0]) { const reader = new FileReader(); reader.onload =
+  function(e) { const img = document.createElement('img'); img.src =
+  e.target.result; img.style.maxWidth = '100px'; img.style.margin = '0 8px 8px
+  0'; previewContainer.appendChild(img); item.draggable = true; item.ondragstart
+  = function(e) { e.dataTransfer.setData('text/plain', idx);
+  item.classList.add('dragging'); }; item.ondragend = function() {
+  item.classList.remove('dragging'); }; item.ondragover = function(e) {
+  e.preventDefault(); item.classList.add('dragover'); }; item.ondragleave =
+  function() { item.classList.remove('dragover'); }; item.ondrop = function(e) {
+  e.preventDefault(); item.classList.remove('dragover'); const fromIdx =
+  +e.dataTransfer.getData('text/plain'); const toIdx = idx; if (fromIdx !==
+  toIdx) { // Меняем файлы местами const dtFrom = new DataTransfer(); if
+  (fileInputs[fromIdx].files[0]) dtFrom.items.add(fileInputs[fromIdx].files[0]);
+  const dtTo = new DataTransfer(); if (fileInputs[toIdx].files[0])
+  dtTo.items.add(fileInputs[toIdx].files[0]); fileInputs[fromIdx].files =
+  dtTo.files; fileInputs[toIdx].files = dtFrom.files; updatePreview(); } }; };
+  reader.readAsDataURL(fileInput.files[0]); } }); }); }); }); const dropzone =
+  document.getElementById('dropzone'); const fileInputs =
+  document.querySelectorAll('input[type="file"][name="images"]');
+  dropzone.addEventListener('dragover', e => { e.preventDefault();
+  dropzone.classList.add('dragover'); }); dropzone.addEventListener('drop', e =>
+  { e.preventDefault(); dropzone.classList.remove('dragover'); const files =
+  Array.from(e.dataTransfer.files).filter(f =>
+  f.type.startsWith('image/')).slice(0, fileInputs.length); let inputIdx = 0;
+  files.forEach(file => { // Найти первый свободный input while (inputIdx <
+  fileInputs.length && fileInputs[inputIdx].files.length > 0) { inputIdx++; } if
+  (inputIdx < fileInputs.length) { const dt = new DataTransfer();
+  dt.items.add(file); fileInputs[inputIdx].files = dt.files; inputIdx++; } });
+  updatePreview(); }); function updatePreview() { previewContainer.innerHTML =
+  ''; imageInputs.forEach(input => { if (input.files.length > 0) { const img =
+  document.createElement('img'); img.src = URL.createObjectURL(input.files[0]);
+  img.style.maxWidth = '100px'; img.style.margin = '0 8px 8px 0';
+  previewContainer.appendChild(img); } }); } function setMainImage(url) {
+  document.getElementById('mainProductImage').src = url; }
+</script>
+
+<div class="product-gallery">
+  <div class="product-gallery__main">
+    <img
+      id="mainProductImage"
+      src="{{getFirstImage this.images this.image_url}}"
+      alt="Main product image"
+    />
+  </div>
+  <div class="product-gallery__thumbs">
+    {{#each images}}
+      <img
+        class="product-gallery__thumb"
+        src="{{this}}"
+        alt="Product image"
+        onclick="setMainImage('{{this}}')"
+      />
+    {{/each}}
+  </div>
+</div>
+
+<style>
+  .image-preview__item.dragover { outline: 2px dashed #007bff; }
+  .image-preview__item.dragging { opacity: 0.5; }
+</style>
+
+export function getFirstImage(images, image_url) { try { const arr = typeof
+images === 'string' ? JSON.parse(images) : images; return arr && arr.length ?
+arr[0] : (image_url || ''); } catch (e) { return image_url || ''; } }

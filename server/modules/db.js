@@ -499,3 +499,102 @@ export async function getProductsByArticlePrefix(prefix) {
   );
   return rows;
 }
+
+export async function addProduct({
+  name,
+  price,
+  old_price,
+  brand,
+  article,
+  category,
+  description,
+  spec_json,
+  image_url,
+  images,
+}) {
+  const pool = await getPool();
+  const sql = `INSERT INTO products (name, price, old_price, brand, article, category, description, spec_json, image_url, images) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  const [result] = await pool.query(sql, [
+    name,
+    price,
+    old_price || null,
+    brand || null,
+    article || null,
+    category || null,
+    description || null,
+    spec_json || null,
+    image_url || null,
+    images || null,
+  ]);
+  return result.insertId;
+}
+
+export async function updateProduct(
+  id,
+  {
+    name,
+    price,
+    old_price,
+    brand,
+    article,
+    category,
+    description,
+    spec_json,
+    image_url,
+    images,
+  }
+) {
+  const pool = await getPool();
+  const fields = [
+    "name = ?",
+    "price = ?",
+    "old_price = ?",
+    "brand = ?",
+    "article = ?",
+    "category = ?",
+    "description = ?",
+    "spec_json = ?",
+  ];
+  const values = [
+    name,
+    price,
+    old_price || null,
+    brand || null,
+    article || null,
+    category || null,
+    description || null,
+    spec_json || null,
+  ];
+  if (typeof image_url !== "undefined") {
+    fields.push("image_url = ?");
+    values.push(image_url);
+  }
+  if (typeof images !== "undefined") {
+    fields.push("images = ?");
+    values.push(images);
+  }
+  values.push(id);
+  const sql = `UPDATE products SET ${fields.join(", ")} WHERE id = ?`;
+  await pool.query(sql, values);
+}
+
+export async function deleteProduct(id) {
+  const pool = await getPool();
+  await pool.query(`DELETE FROM products WHERE id = ?`, [id]);
+}
+
+export async function getProductsByCategory(category) {
+  const pool = await getPool();
+  const [rows] = await pool.query("SELECT * FROM products WHERE category = ?", [
+    category,
+  ]);
+  return rows;
+}
+
+export async function getAllCategories() {
+  const pool = await getPool();
+  const [rows] = await pool.query(
+    "SELECT DISTINCT category FROM products WHERE category IS NOT NULL AND category != ''"
+  );
+  return rows.map((row) => row.category);
+}

@@ -23,6 +23,7 @@ import usersRoutes from "./routes/users.js";
 import pagesRouter from "./routes/pages.js";
 import likesRouter from "./routes/likes.js";
 import cartRouter from "./routes/cart.js";
+import adminRouter from "./routes/admin.js";
 
 // --- Подключение к базе данных ---
 await initDbPool();
@@ -109,6 +110,7 @@ webserver.use("/api/likes", likesRouter);
 webserver.use("/api/cart", cartRouter);
 
 webserver.use("/", pagesRouter);
+webserver.use("/admin", adminRouter);
 
 webserver.listen(HTTP_PORT, () => {
   console.log(`HTTP listening on http://localhost:${HTTP_PORT}`);

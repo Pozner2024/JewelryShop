@@ -19,7 +19,7 @@
             {{#each cartItems}}
               <div class="cart-item" data-product-id="{{this.id}}">
                 <img
-                  src="{{this.image_url}}"
+                  src="{{getFirstImage this.images this.image_url}}"
                   alt="{{this.name}}"
                   class="cart-item__image"
                 />

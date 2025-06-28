@@ -18,7 +18,7 @@
           <div class="product-gallery__main product-card">
             <img
               id="mainProductImage"
-              src="{{product.image_url}}"
+              src="{{getFirstImage product.images product.image_url}}"
               alt="{{product.name}}"
               class="product-gallery__img"
             />
@@ -31,27 +31,11 @@
             </button>
           </div>
           <div class="product-gallery__thumbs">
-            <div class="product-gallery__thumb product-gallery__thumb--active">
-              <img
-                src="/images/product-1.jpg"
-                alt="Gold Ring with Diamond"
-                class="product-gallery__thumb-img"
-              />
-            </div>
-            <div class="product-gallery__thumb">
-              <img
-                src="/images/product-2.jpg"
-                alt="Gold Ring Side"
-                class="product-gallery__thumb-img"
-              />
-            </div>
-            <div class="product-gallery__thumb">
-              <img
-                src="/images/product-3.jpg"
-                alt="Gold Ring on Hand"
-                class="product-gallery__thumb-img"
-              />
-            </div>
+            {{#each (parseImages product.images product.image_url)}}
+              <div class="product-gallery__thumb" onclick="setMainImage('{{this}}')">
+                <img src="{{this}}" alt="{{../product.name}}" class="product-gallery__thumb-img" />
+              </div>
+            {{/each}}
           </div>
         </div>
       </div>

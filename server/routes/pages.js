@@ -16,6 +16,8 @@ import {
   getAllUsers,
   getAllPurchases,
   getProductsByArticlePrefix,
+  getProductsByCategory,
+  getAllCategories,
 } from "../modules/db.js";
 
 const router = Router();
@@ -233,18 +235,25 @@ router.get("/cart", requireAuth, async (req, res) => {
 router.get("/profile", requireAuth, async (req, res) => {
   try {
     if (req.user.role === "admin") {
-      // For admins, show all users, all products, and all purchases
       const allUsers = await getAllUsers();
-      const allProducts = await getAllProducts();
       const purchases = await getAllPurchases();
+      const category = req.query.category || "all";
+      const categories = await getAllCategories();
+      let products;
+      if (category === "all") {
+        products = await getAllProducts();
+      } else {
+        products = await getProductsByCategory(category);
+      }
       res.render("profile", {
         user: req.user,
         users: allUsers,
-        products: allProducts,
+        products,
         purchases,
+        selectedCategory: category,
+        categories,
       });
     } else {
-      // For regular users, show their liked products
       const likedProducts = await getLikedProductsByUserId(req.user.id);
       res.render("profile", { user: req.user, likedProducts: likedProducts });
     }

@@ -274,3 +274,16 @@ export function whoami(req, res) {
     role: req.user.role,
   });
 }
+
+// Middleware для проверки прав администратора
+export function isAdmin(req, res, next) {
+  if (req.user && req.user.role === "admin") {
+    return next();
+  }
+  if (req.xhr || req.headers.accept?.includes("application/json")) {
+    return res
+      .status(403)
+      .json({ error: "Доступ запрещён: только для администратора" });
+  }
+  res.status(403).send("Доступ запрещён: только для администратора");
+}

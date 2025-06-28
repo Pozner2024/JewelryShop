@@ -47,27 +47,132 @@
     </div>
 
     <div id="products-section" class="admin-section" style="display: none;">
-      <h3>All Products</h3>
+      <div class="products-header">
+        <h3>All Products</h3>
+        <button class="btn btn-success add-btn-square" onclick="showAddProductModal()" title="Add Product">+</button>
+      </div>
+      <div class="products-filters">
+        <a href="/profile?tab=products&category=all" class="btn btn-filter {{#if (eq selectedCategory 'all')}}active{{/if}}">Все</a>
+        {{#each categories}}
+          <a href="/profile?tab=products&category={{this}}" class="btn btn-filter {{#if (eq ../selectedCategory this)}}active{{/if}}">{{capitalize this}}</a>
+        {{/each}}
+      </div>
       <table class="admin-table">
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Brand</th>
+            <th><span title="ID">#️⃣</span> ID</th>
+            <th><span title="Name">💍</span> Name</th>
+            <th><span title="Price">💲</span> Price</th>
+            <th><span title="Brand">🏷️</span> Brand</th>
+            <th><span title="Actions">⚙️</span> Actions</th>
           </tr>
         </thead>
         <tbody>
           {{#each products}}
-          <tr>
-            <td>{{this.id}}</td>
-            <td>{{this.name}}</td>
-            <td>{{this.price}}</td>
-            <td>{{this.brand}}</td>
+          <tr 
+            data-category="{{this.category}}" 
+            data-description="{{this.description}}" 
+            data-old-price="{{this.old_price}}" 
+            data-article="{{this.article}}" 
+            data-spec-json="{{this.spec_json}}"
+          >
+            <td data-label="#️⃣ ID">{{this.id}}</td>
+            <td data-label="💍 Name">{{this.name}}</td>
+            <td data-label="💲 Price">{{this.price}}</td>
+            <td data-label="🏷️ Brand">{{this.brand}}</td>
+            <td data-label="⚙️ Actions">
+              <button class="btn btn-sm btn-primary" onclick="editProduct({{this.id}})">Edit</button>
+              <button class="btn btn-sm btn-danger" onclick="deleteProduct({{this.id}})">Delete</button>
+            </td>
           </tr>
           {{/each}}
         </tbody>
       </table>
+      <!-- Модальное окно для добавления товара (заглушка) -->
+      <div id="addProductModal" class="modal" style="display:none;">
+        <div class="modal-content">
+          <span class="close" onclick="closeAddProductModal()">&times;</span>
+          <h2>Add New Product</h2>
+          <form id="addProductForm" class="product-form-grid">
+            <div class="form-row">
+              <label>Name:<br><input name="name" required></label>
+              <label>Price:<br><input name="price" type="number" min="0" step="0.01" required></label>
+              <label>Old Price:<br><input name="old_price" type="number" min="0" step="0.01"></label>
+            </div>
+            <div class="form-row">
+              <label>Brand:<br><input name="brand"></label>
+              <label>Article:<br><input name="article"></label>
+              <label>Category:<br><input name="category"></label>
+            </div>
+            <div class="form-row">
+              <label for="desc-field">Description:</label>
+              <textarea id="desc-field" name="description"></textarea>
+            </div>
+            <div class="form-row">
+              <label>Material:<br><input name="spec_material"></label>
+              <label>Stone Type:<br><input name="spec_stone_type"></label>
+            </div>
+            <div class="form-row">
+              <label>Weight:<br><input name="spec_weight"></label>
+              <label>Length:<br><input name="spec_length"></label>
+            </div>
+            <div class="form-row">
+              <div class="image-dropzone" id="add-dropzone">Перетащите изображения сюда или выберите файлы ниже</div>
+            </div>
+            <div class="form-row">
+              <label>Main Image:<br><input type="file" name="images" accept="image/*"></label>
+              <label>Image 2:<br><input type="file" name="images" accept="image/*"></label>
+              <label>Image 3:<br><input type="file" name="images" accept="image/*"></label>
+              <label>Image 4:<br><input type="file" name="images" accept="image/*"></label>
+            </div>
+            <div class="image-preview" id="add-image-preview"></div>
+            <button type="submit">Add Product</button>
+          </form>
+        </div>
+      </div>
+      <!-- Модальное окно для редактирования товара -->
+      <div id="editProductModal" class="modal" style="display:none;">
+        <div class="modal-content">
+          <span class="close" onclick="closeEditProductModal()">&times;</span>
+          <h2>Edit Product</h2>
+          <form id="editProductForm" class="product-form-grid">
+            <input type="hidden" name="id">
+            <div class="form-row">
+              <label>Name:<br><input name="name" required></label>
+              <label>Price:<br><input name="price" type="number" min="0" step="0.01" required></label>
+              <label>Old Price:<br><input name="old_price" type="number" min="0" step="0.01"></label>
+            </div>
+            <div class="form-row">
+              <label>Brand:<br><input name="brand"></label>
+              <label>Article:<br><input name="article"></label>
+              <label>Category:<br><input name="category"></label>
+            </div>
+            <div class="form-row">
+              <label for="desc-field">Description:</label>
+              <textarea id="desc-field" name="description"></textarea>
+            </div>
+            <div class="form-row">
+              <label>Material:<br><input name="spec_material"></label>
+              <label>Stone Type:<br><input name="spec_stone_type"></label>
+            </div>
+            <div class="form-row">
+              <label>Weight:<br><input name="spec_weight"></label>
+              <label>Length:<br><input name="spec_length"></label>
+            </div>
+            <div class="form-row">
+              <div class="image-dropzone" id="edit-dropzone">Перетащите изображения сюда или выберите файлы ниже</div>
+            </div>
+            <div class="form-row">
+              <label>Main Image:<br><input type="file" name="images" accept="image/*"></label>
+              <label>Image 2:<br><input type="file" name="images" accept="image/*"></label>
+              <label>Image 3:<br><input type="file" name="images" accept="image/*"></label>
+              <label>Image 4:<br><input type="file" name="images" accept="image/*"></label>
+            </div>
+            <div class="image-preview" id="edit-image-preview"></div>
+            <button type="submit">Save Changes</button>
+          </form>
+        </div>
+      </div>
     </div>
 
     <div id="sales-section" class="admin-section" style="display: none;">
