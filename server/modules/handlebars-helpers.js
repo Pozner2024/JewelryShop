@@ -115,26 +115,28 @@ const helpers = {
     return str.charAt(0).toUpperCase() + str.slice(1);
   },
   // --- Добавлено для поддержки изображений товаров ---
-  getFirstImage: function (images, image_url) {
+  getFirstImage: function (images) {
     try {
       const arr = typeof images === "string" ? JSON.parse(images) : images;
       if (arr && arr.length) return arr[0];
-      return image_url || "";
+      return "";
     } catch (e) {
-      return image_url || "";
+      return "";
     }
   },
-  parseImages: function (images, image_url) {
-    if (!images && image_url) return [image_url];
+  parseImages: function (images) {
     if (!images) return [];
     try {
       const arr = typeof images === "string" ? JSON.parse(images) : images;
       if (arr && arr.length) return arr;
-      if (image_url) return [image_url];
       return [];
     } catch (e) {
-      return image_url ? [image_url] : [];
+      return [];
     }
+  },
+  objectEntries: function (obj) {
+    if (!obj || typeof obj !== "object") return [];
+    return Object.entries(obj);
   },
 };
 
@@ -159,26 +161,24 @@ export function formatDate(dateString) {
   return new Date(dateString).toLocaleDateString(undefined, options);
 }
 
-export function parseImages(images, image_url) {
-  if (!images && image_url) return [image_url];
+export function parseImages(images) {
   if (!images) return [];
   try {
     const arr = typeof images === "string" ? JSON.parse(images) : images;
     if (arr && arr.length) return arr;
-    if (image_url) return [image_url];
     return [];
   } catch (e) {
-    return image_url ? [image_url] : [];
+    return [];
   }
 }
 
-export function getFirstImage(images, image_url) {
+export function getFirstImage(images) {
   try {
     const arr = typeof images === "string" ? JSON.parse(images) : images;
     if (arr && arr.length) return arr[0];
-    return image_url || "";
+    return "";
   } catch (e) {
-    return image_url || "";
+    return "";
   }
 }
 

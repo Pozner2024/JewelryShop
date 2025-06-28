@@ -59,6 +59,12 @@ webserver.use(express.static(clientPublicDir));
 // Раздача изображений из client/images по пути /images
 webserver.use("/images", express.static(path.join(CLIENT_DIR, "images")));
 
+// Раздача изображений товаров из uploads/products
+webserver.use(
+  "/uploads/products",
+  express.static(path.join(process.cwd(), "uploads/products"))
+);
+
 // Раздача статических файлов из директории клиента
 webserver.use(express.static(CLIENT_DIR, { index: false }));
 

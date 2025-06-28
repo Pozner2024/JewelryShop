@@ -123,8 +123,8 @@
         <div class="tabs__panel" data-panel="specs">
           <ul>
             {{#if product.specifications}}
-              {{#each product.specifications}}
-                <li>{{@key}}: {{this}}</li>
+              {{#each (objectEntries product.specifications)}}
+                <li>{{this.[0]}}: {{this.[1]}}</li>
               {{/each}}
             {{else}}
               <li>No specifications available.</li>

@@ -209,53 +209,61 @@ window.showEditProductModal = function (product) {
       if (product.images) {
         images =
           typeof product.images === "string"
-            ? JSON.parse(product.images)
+            ? JSON.parse(product.images || "[]")
             : product.images;
-      } else if (product.image_url) {
-        images = [product.image_url];
       }
     } catch (e) {
       images = [];
     }
-    // Сохраняем массив в window для drag&drop
-    window._editImages = images.slice();
+    if (!Array.isArray(images)) {
+      images = [];
+    }
+    // Сохраняем массив в window для drag&drop, всегда длиной 4
+    window._editImages = images.slice(0, 4);
+    while (window._editImages.length < 4) window._editImages.push(null);
+    console.log("editImages", window._editImages);
+    if (form.existing_images) {
+      form.existing_images.value = JSON.stringify(window._editImages);
+    }
     function renderEditImages() {
       preview.innerHTML = "";
-      window._editImages.forEach((url, idx) => {
+      for (let idx = 0; idx < 4; idx++) {
+        const url = window._editImages[idx];
+        console.log("rendering image", url);
+        const item = document.createElement("div");
+        item.className = "image-preview__item";
+        item.draggable = true;
+        item.ondragstart = function (ev) {
+          ev.dataTransfer.setData("text/plain", idx);
+          item.classList.add("dragging");
+        };
+        item.ondragend = function () {
+          item.classList.remove("dragging");
+        };
+        item.ondragover = function (ev) {
+          ev.preventDefault();
+          item.classList.add("dragover");
+        };
+        item.ondragleave = function () {
+          item.classList.remove("dragover");
+        };
+        item.ondrop = function (ev) {
+          ev.preventDefault();
+          item.classList.remove("dragover");
+          const fromIdx = +ev.dataTransfer.getData("text/plain");
+          if (fromIdx !== idx) {
+            const arr = window._editImages;
+            const temp = arr[fromIdx];
+            arr[fromIdx] = arr[idx];
+            arr[idx] = temp;
+            renderEditImages();
+          }
+        };
         if (url) {
-          const item = document.createElement("div");
-          item.className = "image-preview__item";
-          item.draggable = true;
-          item.ondragstart = function (ev) {
-            ev.dataTransfer.setData("text/plain", idx);
-            item.classList.add("dragging");
-          };
-          item.ondragend = function () {
-            item.classList.remove("dragging");
-          };
-          item.ondragover = function (ev) {
-            ev.preventDefault();
-            item.classList.add("dragover");
-          };
-          item.ondragleave = function () {
-            item.classList.remove("dragover");
-          };
-          item.ondrop = function (ev) {
-            ev.preventDefault();
-            item.classList.remove("dragover");
-            const fromIdx = +ev.dataTransfer.getData("text/plain");
-            const toIdx = idx;
-            if (fromIdx !== toIdx) {
-              const arr = window._editImages;
-              const temp = arr[fromIdx];
-              arr[fromIdx] = arr[toIdx];
-              arr[toIdx] = temp;
-              renderEditImages();
-            }
-          };
           const img = document.createElement("img");
           img.src = url;
           item.appendChild(img);
+          console.log("appended image", img.src);
           // Кнопка удаления
           const btn = document.createElement("button");
           btn.type = "button";
@@ -265,11 +273,18 @@ window.showEditProductModal = function (product) {
           btn.onclick = function () {
             window._editImages[idx] = null;
             renderEditImages();
+            if (form.existing_images) {
+              form.existing_images.value = JSON.stringify(window._editImages);
+            }
           };
           item.appendChild(btn);
-          preview.appendChild(item);
         }
-      });
+        preview.appendChild(item);
+      }
+      // После любого изменения превью обновляем скрытое поле
+      if (form.existing_images) {
+        form.existing_images.value = JSON.stringify(window._editImages);
+      }
     }
     renderEditImages();
     // modal open
@@ -368,6 +383,7 @@ window.editProduct = function (id) {
     article: row.dataset.article || "",
     category: row.dataset.category || "",
     spec_json: row.dataset.specJson || "",
+    images: row.dataset.images || "",
   };
   showEditProductModal(product);
 };

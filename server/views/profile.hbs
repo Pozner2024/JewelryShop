@@ -52,7 +52,7 @@
         <button class="btn btn-success add-btn-square" onclick="showAddProductModal()" title="Add Product">+</button>
       </div>
       <div class="products-filters">
-        <a href="/profile?tab=products&category=all" class="btn btn-filter {{#if (eq selectedCategory 'all')}}active{{/if}}">Все</a>
+        <a href="/profile?tab=products&category=all" class="btn btn-filter {{#if (eq selectedCategory 'all')}}active{{/if}}">All</a>
         {{#each categories}}
           <a href="/profile?tab=products&category={{this}}" class="btn btn-filter {{#if (eq ../selectedCategory this)}}active{{/if}}">{{capitalize this}}</a>
         {{/each}}
@@ -75,9 +75,10 @@
             data-old-price="{{this.old_price}}" 
             data-article="{{this.article}}" 
             data-spec-json="{{this.spec_json}}"
+            data-images="{{json this.images}}"
           >
             <td data-label="#️⃣ ID">{{this.id}}</td>
-            <td data-label="💍 Name">{{this.name}}</td>
+            <td data-label="💍 Name"><a href="/product/{{this.id}}" target="_blank" class="product-link">{{this.name}}</a></td>
             <td data-label="💲 Price">{{this.price}}</td>
             <td data-label="🏷️ Brand">{{this.brand}}</td>
             <td data-label="⚙️ Actions">
@@ -117,16 +118,35 @@
               <label>Length:<br><input name="spec_length"></label>
             </div>
             <div class="form-row">
-              <div class="image-dropzone" id="add-dropzone">Перетащите изображения сюда или выберите файлы ниже</div>
+              <div class="image-dropzone" id="add-dropzone">Drag images here or select files below</div>
             </div>
-            <div class="form-row">
-              <label>Main Image:<br><input type="file" name="images" accept="image/*"></label>
-              <label>Image 2:<br><input type="file" name="images" accept="image/*"></label>
-              <label>Image 3:<br><input type="file" name="images" accept="image/*"></label>
-              <label>Image 4:<br><input type="file" name="images" accept="image/*"></label>
+            <div class="images-row">
+              <label>Main Image:<br>
+                <input type="file" name="images" accept="image/*" id="add-main-image" style="display:none;" onchange="document.getElementById('add-main-image-label').textContent = this.files[0]?.name || '';">
+                <button type="button" class="form-button" onclick="document.getElementById('add-main-image').click(); return false;">Choose file</button>
+                <span id="add-main-image-label"></span>
+              </label>
+              <label>Image 2:<br>
+                <input type="file" name="images" accept="image/*" id="add-image-2" style="display:none;" onchange="document.getElementById('add-image-2-label').textContent = this.files[0]?.name || '';">
+                <button type="button" class="form-button" onclick="document.getElementById('add-image-2').click(); return false;">Choose file</button>
+                <span id="add-image-2-label"></span>
+              </label>
+              <label>Image 3:<br>
+                <input type="file" name="images" accept="image/*" id="add-image-3" style="display:none;" onchange="document.getElementById('add-image-3-label').textContent = this.files[0]?.name || '';">
+                <button type="button" class="form-button" onclick="document.getElementById('add-image-3').click(); return false;">Choose file</button>
+                <span id="add-image-3-label"></span>
+              </label>
+              <label>Image 4:<br>
+                <input type="file" name="images" accept="image/*" id="add-image-4" style="display:none;" onchange="document.getElementById('add-image-4-label').textContent = this.files[0]?.name || '';">
+                <button type="button" class="form-button" onclick="document.getElementById('add-image-4').click(); return false;">Choose file</button>
+                <span id="add-image-4-label"></span>
+              </label>
             </div>
             <div class="image-preview" id="add-image-preview"></div>
-            <button type="submit">Add Product</button>
+            <div class="modal-btn-row">
+              <button type="submit">Add Product</button>
+              <button type="button" class="btn btn-cancel" onclick="closeAddProductModal()">Cancel</button>
+            </div>
           </form>
         </div>
       </div>
@@ -137,6 +157,7 @@
           <h2>Edit Product</h2>
           <form id="editProductForm" class="product-form-grid">
             <input type="hidden" name="id">
+            <input type="hidden" name="existing_images" id="existingImagesInput">
             <div class="form-row">
               <label>Name:<br><input name="name" required></label>
               <label>Price:<br><input name="price" type="number" min="0" step="0.01" required></label>
@@ -160,16 +181,35 @@
               <label>Length:<br><input name="spec_length"></label>
             </div>
             <div class="form-row">
-              <div class="image-dropzone" id="edit-dropzone">Перетащите изображения сюда или выберите файлы ниже</div>
+              <div class="image-dropzone" id="edit-dropzone">Drag images here or select files below</div>
             </div>
-            <div class="form-row">
-              <label>Main Image:<br><input type="file" name="images" accept="image/*"></label>
-              <label>Image 2:<br><input type="file" name="images" accept="image/*"></label>
-              <label>Image 3:<br><input type="file" name="images" accept="image/*"></label>
-              <label>Image 4:<br><input type="file" name="images" accept="image/*"></label>
+            <div class="images-row">
+              <label>Main Image:<br>
+                <input type="file" name="images" accept="image/*" id="edit-main-image" style="display:none;" onchange="document.getElementById('edit-main-image-label').textContent = this.files[0]?.name || '';">
+                <button type="button" class="form-button" onclick="document.getElementById('edit-main-image').click(); return false;">Choose file</button>
+                <span id="edit-main-image-label"></span>
+              </label>
+              <label>Image 2:<br>
+                <input type="file" name="images" accept="image/*" id="edit-image-2" style="display:none;" onchange="document.getElementById('edit-image-2-label').textContent = this.files[0]?.name || '';">
+                <button type="button" class="form-button" onclick="document.getElementById('edit-image-2').click(); return false;">Choose file</button>
+                <span id="edit-image-2-label"></span>
+              </label>
+              <label>Image 3:<br>
+                <input type="file" name="images" accept="image/*" id="edit-image-3" style="display:none;" onchange="document.getElementById('edit-image-3-label').textContent = this.files[0]?.name || '';">
+                <button type="button" class="form-button" onclick="document.getElementById('edit-image-3').click(); return false;">Choose file</button>
+                <span id="edit-image-3-label"></span>
+              </label>
+              <label>Image 4:<br>
+                <input type="file" name="images" accept="image/*" id="edit-image-4" style="display:none;" onchange="document.getElementById('edit-image-4-label').textContent = this.files[0]?.name || '';">
+                <button type="button" class="form-button" onclick="document.getElementById('edit-image-4').click(); return false;">Choose file</button>
+                <span id="edit-image-4-label"></span>
+              </label>
             </div>
             <div class="image-preview" id="edit-image-preview"></div>
-            <button type="submit">Save Changes</button>
+            <div class="modal-btn-row">
+              <button type="submit">Save</button>
+              <button type="button" class="btn btn-cancel" onclick="closeEditProductModal()">Cancel</button>
+            </div>
           </form>
         </div>
       </div>
@@ -221,3 +261,30 @@
   </div>
   {{/if}}
 </div>
+
+<style>
+.images-row {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+.images-row label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+.images-row label input[type="file"] {
+  display: none;
+}
+.images-row label .form-button {
+  margin-left: 0;
+}
+.images-row label span {
+  font-size: 0.95em;
+  color: #777;
+  margin-left: 0;
+}
+</style>

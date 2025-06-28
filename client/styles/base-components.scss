@@ -44,7 +44,7 @@
 .form-button {
   padding: $spacing-sm;
   border: none;
-  background: linear-gradient(135deg, #bb2e9c, #8b1f6b);
+  background: $color-primary;
   color: $color-white;
   border-radius: $border-radius-sm;
   cursor: pointer;
@@ -54,6 +54,7 @@
   transition: $transition;
 
   &:hover {
+    background: $color-primary-dark;
     transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }

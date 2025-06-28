@@ -167,18 +167,6 @@ router.get("/product/:id", async (req, res) => {
       return res.status(404).send("Product not found");
     }
 
-    // Корректно парсим images
-    try {
-      product.images =
-        typeof product.images === "string"
-          ? JSON.parse(product.images)
-          : Array.isArray(product.images)
-          ? product.images
-          : [];
-    } catch (e) {
-      product.images = [];
-    }
-
     let isLiked = false;
     if (req.user) {
       const likedProductIds = await getLikedProductIdsByUserId(req.user.id);
@@ -257,6 +245,16 @@ router.get("/profile", requireAuth, async (req, res) => {
       } else {
         products = await getProductsByCategory(category);
       }
+      // Преобразуем images из строки в массив для корректного отображения превью
+      products.forEach((product) => {
+        if (typeof product.images === "string") {
+          try {
+            product.images = JSON.parse(product.images);
+          } catch (e) {
+            product.images = [];
+          }
+        }
+      });
       res.render("profile", {
         user: req.user,
         users: allUsers,

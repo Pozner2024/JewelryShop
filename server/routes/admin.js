@@ -12,22 +12,20 @@ if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 const storage = multer.memoryStorage();
 const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
 
+// Функция для "чистки" имени (убрать пробелы, спецсимволы и т.д.)
+function slugify(text) {
+  return text
+    .toString()
+    .toLowerCase()
+    .replace(/\s+/g, "-") // Replace spaces with -
+    .replace(/[^a-z0-9\-]/g, "") // Remove all non-alphanumeric chars except -
+    .replace(/-+/g, "-") // Replace multiple - with single -
+    .replace(/^-+|-+$/g, ""); // Trim - from start and end
+}
+
 // Добавление нового товара (API для админки)
 router.post("/products/new", upload.array("images", 4), async (req, res) => {
   try {
-    // Сжать и сохранить изображения
-    const imageUrls = [];
-    for (let i = 0; i < req.files.length; i++) {
-      const file = req.files[i];
-      const ext = path.extname(file.originalname) || ".jpg";
-      const filename = `product_${Date.now()}_${i}${ext}`;
-      const filepath = path.join(uploadDir, filename);
-      await sharp(file.buffer)
-        .resize(800, 800, { fit: "inside" })
-        .jpeg({ quality: 80 })
-        .toFile(filepath);
-      imageUrls.push(`/uploads/products/${filename}`);
-    }
     // Остальные поля из формы
     const {
       name,
@@ -39,6 +37,7 @@ router.post("/products/new", upload.array("images", 4), async (req, res) => {
       description,
       spec_json,
     } = req.body;
+    // 1. Сначала создаём товар без images
     const productId = await addProduct({
       name,
       price,
@@ -48,9 +47,36 @@ router.post("/products/new", upload.array("images", 4), async (req, res) => {
       category,
       description,
       spec_json,
-      image_url: imageUrls[0] || null,
-      images: JSON.stringify(imageUrls),
+      images: "[]",
     });
+    // 2. Сжать и сохранить изображения
+    const imageUrls = [];
+    const baseName = slugify(req.body.name || "product");
+    for (let i = 0; i < req.files.length; i++) {
+      const file = req.files[i];
+      const ext = path.extname(file.originalname) || ".jpg";
+      const filename = `${baseName}-${i + 1}${ext}`;
+      const filepath = path.join(uploadDir, filename);
+      await sharp(file.buffer)
+        .resize(800, 800, { fit: "inside" })
+        .jpeg({ quality: 80 })
+        .toFile(filepath);
+      imageUrls.push(`/uploads/products/${filename}`);
+    }
+    // 3. После загрузки файлов обновляем поле images
+    if (imageUrls.length > 0) {
+      await updateProduct(productId, {
+        name,
+        price,
+        old_price,
+        brand,
+        article,
+        category,
+        description,
+        spec_json,
+        images: JSON.stringify(imageUrls),
+      });
+    }
     res.status(201).json({ success: true, id: productId, images: imageUrls });
   } catch (err) {
     console.error("Error adding product:", err);
@@ -75,22 +101,35 @@ router.post(
         spec_json,
       } = req.body;
       const { id } = req.params;
-      let image_url = undefined;
       let images = undefined;
-      if (req.files && req.files.length > 0) {
-        const imageUrls = [];
-        for (let i = 0; i < req.files.length; i++) {
-          const file = req.files[i];
+      // Получаем старые изображения из скрытого поля
+      let existingImages = [];
+      if (req.body.existing_images) {
+        try {
+          existingImages = JSON.parse(req.body.existing_images);
+        } catch (e) {
+          existingImages = [];
+        }
+      }
+      // Собираем итоговый массив изображений
+      const imageUrls = [];
+      for (let i = 0; i < 4; i++) {
+        const file = req.files && req.files[i];
+        if (file) {
           const ext = path.extname(file.originalname) || ".jpg";
-          const filename = `product_${Date.now()}_${i}${ext}`;
+          const baseName = slugify(name || "product");
+          const filename = `${baseName}-${i + 1}${ext}`;
           const filepath = path.join(uploadDir, filename);
           await sharp(file.buffer)
             .resize(800, 800, { fit: "inside" })
             .jpeg({ quality: 80 })
             .toFile(filepath);
-          imageUrls.push(`/uploads/products/${filename}`);
+          imageUrls[i] = `/uploads/products/${filename}`;
+        } else if (existingImages[i]) {
+          imageUrls[i] = existingImages[i];
         }
-        image_url = imageUrls[0] || null;
+      }
+      if (imageUrls.length > 0) {
         images = JSON.stringify(imageUrls);
       }
       const updateData = {
@@ -103,7 +142,6 @@ router.post(
         description,
         spec_json,
       };
-      if (image_url !== undefined) updateData.image_url = image_url;
       if (images !== undefined) updateData.images = images;
       await updateProduct(id, updateData);
       res.status(200).json({ success: true });

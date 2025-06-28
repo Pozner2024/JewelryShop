@@ -509,11 +509,10 @@ export async function addProduct({
   category,
   description,
   spec_json,
-  image_url,
   images,
 }) {
   const pool = await getPool();
-  const sql = `INSERT INTO products (name, price, old_price, brand, article, category, description, spec_json, image_url, images) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  const sql = `INSERT INTO products (name, price, old_price, brand, article, category, description, spec_json, images) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
   const [result] = await pool.query(sql, [
     name,
     price,
@@ -523,7 +522,6 @@ export async function addProduct({
     category || null,
     description || null,
     spec_json || null,
-    image_url || null,
     images || null,
   ]);
   return result.insertId;
@@ -540,7 +538,6 @@ export async function updateProduct(
     category,
     description,
     spec_json,
-    image_url,
     images,
   }
 ) {
@@ -554,6 +551,7 @@ export async function updateProduct(
     "category = ?",
     "description = ?",
     "spec_json = ?",
+    "images = ?",
   ];
   const values = [
     name,
@@ -564,15 +562,8 @@ export async function updateProduct(
     category || null,
     description || null,
     spec_json || null,
+    images || "[]",
   ];
-  if (typeof image_url !== "undefined") {
-    fields.push("image_url = ?");
-    values.push(image_url);
-  }
-  if (typeof images !== "undefined") {
-    fields.push("images = ?");
-    values.push(images);
-  }
   values.push(id);
   const sql = `UPDATE products SET ${fields.join(", ")} WHERE id = ?`;
   await pool.query(sql, values);
