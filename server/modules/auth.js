@@ -85,7 +85,7 @@ async function sendActivationEmail(email, data) {
 
     console.log(`✓ Письмо успешно отправлено на ${email}`);
   } catch (error) {
-    console.error("Ошибка при отправке активационного письма:", error);
+    console.error("Error sending activation email:", error);
     throw error;
   }
 }
@@ -167,8 +167,8 @@ export async function register(req, res) {
         "Регистрация прошла успешно! Проверьте вашу почту для активации аккаунта.",
     });
   } catch (err) {
-    console.error("Ошибка регистрации:", err);
-    res.status(500).json({ message: "Ошибка сервера при регистрации." });
+    console.error("Registration error:", err);
+    res.status(500).json({ message: "Server error during registration." });
   }
 }
 
@@ -197,10 +197,10 @@ export async function activate(req, res) {
     // Редирект на главную страницу с сообщением об успешной активации
     return res.redirect(`/?activated=true`);
   } catch (err) {
-    console.error("Ошибка активации:", err);
+    console.error("Activation error:", err);
     return res.status(500).json({
       success: false,
-      message: "Ошибка сервера при активации.",
+      message: "Server error during activation.",
     });
   }
 }
@@ -253,15 +253,15 @@ export async function login(req, res) {
       },
     });
   } catch (err) {
-    console.error("Ошибка при входе:", err);
-    res.status(500).json({ message: "Ошибка сервера при попытке входа." });
+    console.error("Login error:", err);
+    res.status(500).json({ message: "Server error during login." });
   }
 }
 
 // Выход пользователя
 export function logout(req, res) {
   req.session.destroy((err) => {
-    if (err) console.error("Ошибка при уничтожении сессии:", err);
+    if (err) console.error("Error destroying session:", err);
     res.redirect("/");
   });
 }

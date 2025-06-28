@@ -77,6 +77,7 @@
           </div>
           <span class="rating__count">(24)</span>
         </div>
+        {{#if showSizes}}
         <div class="product-info__sizes">
           <span class="product-info__label">Size:</span>
           <button class="size-btn size-btn--active">16</button>
@@ -84,6 +85,7 @@
           <button class="size-btn">18</button>
           <button class="size-btn">19</button>
         </div>
+        {{/if}}
         <div class="product-info__quantity">
           <span class="product-info__label">Quantity:</span>
           <div class="quantity">
@@ -111,10 +113,13 @@
             <p>{{product.description}}</p>
         </div>
         <ul class="product-info__features">
-          <li>Material: 585 Gold</li>
-          <li>Insert: Diamond 0.25ct</li>
-          <li>Weight: 3.2g</li>
-          <li>Brand: Elegant</li>
+          {{#if product.specifications}}
+            {{#each product.specifications}}
+              <li>{{@key}}: {{this}}</li>
+            {{/each}}
+          {{else}}
+            <li>No specifications available.</li>
+          {{/if}}
         </ul>
       </div>
     </div>
@@ -125,65 +130,41 @@
           Description
         </button>
         <button class="tabs__btn" data-tab="specs">Specifications</button>
-        <button class="tabs__btn" data-tab="reviews">Reviews (3)</button>
+        <button class="tabs__btn" data-tab="reviews">Reviews ({{reviews.length}})</button>
       </div>
       <div class="tabs__panels">
         <div class="tabs__panel tabs__panel--active" data-panel="desc">
-          <p>
-            This gold ring with a diamond is a true work of art. The classic
-            design is complemented by a sparkling diamond, making it a perfect
-            gift for any occasion.
-          </p>
+          <p>{{product.description}}</p>
         </div>
         <div class="tabs__panel" data-panel="specs">
           <ul>
-            <li>Material: 585 Gold</li>
-            <li>Insert: Diamond 0.25ct</li>
-            <li>Weight: 3.2g</li>
-            <li>Brand: Elegant</li>
-            <li>Country: Russia</li>
+            {{#if product.specifications}}
+              {{#each product.specifications}}
+                <li>{{@key}}: {{this}}</li>
+              {{/each}}
+            {{else}}
+              <li>No specifications available.</li>
+            {{/if}}
           </ul>
         </div>
         <div class="tabs__panel" data-panel="reviews">
-          <div class="review">
-            <div class="review__author">Anna</div>
-            <div class="review__rating">
-              <span class="rating__star rating__star--filled">★</span>
-              <span class="rating__star rating__star--filled">★</span>
-              <span class="rating__star rating__star--filled">★</span>
-              <span class="rating__star rating__star--filled">★</span>
-              <span class="rating__star">★</span>
-            </div>
-            <div class="review__text">
-              Beautiful ring, fast delivery. Very satisfied!
-            </div>
-          </div>
-          <div class="review">
-            <div class="review__author">Olga</div>
-            <div class="review__rating">
-              <span class="rating__star rating__star--filled">★</span>
-              <span class="rating__star rating__star--filled">★</span>
-              <span class="rating__star rating__star--filled">★</span>
-              <span class="rating__star rating__star--filled">★</span>
-              <span class="rating__star rating__star--filled">★</span>
-            </div>
-            <div class="review__text">
-              The diamond sparkles incredibly. Highly recommend!
-            </div>
-          </div>
-          <div class="review">
-            <div class="review__author">Maria</div>
-            <div class="review__rating">
-              <span class="rating__star rating__star--filled">★</span>
-              <span class="rating__star rating__star--filled">★</span>
-              <span class="rating__star rating__star--filled">★</span>
-              <span class="rating__star rating__star--filled">★</span>
-              <span class="rating__star">★</span>
-            </div>
-            <div class="review__text">
-              Great quality and beautiful packaging.
-            </div>
-          </div>
+          {{#if reviews.length}}
+            {{#each reviews}}
+              <div class="review">
+                <div class="review__author">{{this.author_name}}</div>
+                <div class="review__rating">
+                  {{#each (range 1 5)}}
+                    <span class="rating__star{{#if (lte @index ../this.rating)}} rating__star--filled{{/if}}">★</span>
+                  {{/each}}
+                </div>
+                <div class="review__text">
+                  {{this.text}}
+                </div>
+              </div>
+            {{/each}}
+          {{else}}
+            <div class="review__empty">No reviews yet.</div>
+          {{/if}}
         </div>
       </div>
     </div>

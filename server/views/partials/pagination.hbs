@@ -1,0 +1,23 @@
+<div class="pagination">
+  <button class="pagination__btn pagination__btn--prev" data-page="{{prevPage}}" {{#unless hasPrev}}disabled{{/unless}}>
+    <svg class="pagination__icon" viewBox="0 0 24 24">
+      <polyline points="15,18 9,12 15,6"></polyline>
+    </svg>
+    Previous
+  </button>
+  <div class="pagination__pages">
+    {{#each pages}}
+      {{#if dots}}
+        <span class="pagination__dots">...</span>
+      {{else}}
+        <button class="pagination__page {{#if active}}pagination__page--active{{/if}}" data-page="{{number}}" {{#if active}}disabled{{/if}}>{{number}}</button>
+      {{/if}}
+    {{/each}}
+  </div>
+  <button class="pagination__btn pagination__btn--next" data-page="{{nextPage}}" {{#unless hasNext}}disabled{{/unless}}>
+    Next
+    <svg class="pagination__icon" viewBox="0 0 24 24">
+      <polyline points="9,18 15,12 9,6"></polyline>
+    </svg>
+  </button>
+</div> 

@@ -29,9 +29,9 @@
         </div>
         {{!-- Блок цен: текущая цена и (если есть) старая цена --}}
         <div class="product-card__price-block">
-            <p class="product-card__price">${{divide this.price 10}}</p>
+            <p class="product-card__price">${{this.price}}</p>
             {{#if this.old_price}}
-            <p class="product-card__old-price">${{divide this.old_price 10}}</p>
+            <p class="product-card__old-price">${{this.old_price}}</p>
             {{/if}}
         </div>
         {{!-- Блок рейтинга (пока пустой, для будущей реализации) --}}

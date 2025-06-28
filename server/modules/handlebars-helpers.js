@@ -52,11 +52,8 @@ const helpers = {
   },
 
   // Условные сравнения (блочные хелперы)
-  eq(a, b, options) {
-    if (a === b) {
-      return options.fn(this);
-    }
-    return options.inverse(this);
+  eq(a, b) {
+    return a === b;
   },
   gt(a, b, options) {
     const aNum = Number(a);
@@ -99,6 +96,19 @@ const helpers = {
   divide: function (value, divisor) {
     if (!value || !divisor) return 0;
     return (parseFloat(value) / parseFloat(divisor)).toFixed(2);
+  },
+
+  // --- Диапазон чисел для циклов (например, для звёзд рейтинга) ---
+  range(start, end) {
+    const arr = [];
+    for (let i = start; i <= end; i++) {
+      arr.push(i);
+    }
+    return arr;
+  },
+  // Меньше или равно (lte)
+  lte(a, b) {
+    return a <= b;
   },
 };
 

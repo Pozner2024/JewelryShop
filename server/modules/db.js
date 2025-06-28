@@ -490,3 +490,12 @@ export async function getAllPurchases() {
   );
   return rows;
 }
+
+export async function getProductsByArticlePrefix(prefix) {
+  const pool = await getPool();
+  const [rows] = await pool.query(
+    "SELECT * FROM products WHERE article LIKE ?",
+    [`${prefix}-%`]
+  );
+  return rows;
+}

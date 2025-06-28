@@ -1,4 +1,5 @@
 @use "variables" as *;
+@use "sass:color";
 
 /* --- Стили для главной страницы приложения --- */
 .app-page {
@@ -237,7 +238,9 @@
   &__img {
     border-radius: $border-radius;
     width: 100%;
-    max-width: 160px;
+    aspect-ratio: 1 / 1;
+    height: auto;
+    object-fit: cover;
     margin: 0 auto;
     box-shadow: $shadow-sm;
   }
@@ -283,18 +286,114 @@
   }
 }
 
+// Visit Our Salons Section
+.visit-salons {
+  position: relative;
+  background: #181818 url("/images/hero-background.jpg") repeat;
+  color: $color-white;
+  padding: $spacing-xxl 0;
+  text-align: center;
+  margin-bottom: $spacing-xxl;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 1;
+  }
+
+  &__container {
+    position: relative;
+    z-index: 2;
+    max-width: $container-max-width;
+    margin: 0 auto;
+    padding: 0 $spacing-lg;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  &__subtitle,
+  &__title,
+  &__desc {
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+  }
+  &__subtitle {
+    color: $color-white;
+    opacity: 0.7;
+    font-size: $font-size-base;
+    margin-bottom: $spacing-md;
+  }
+  &__title {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-lg;
+    color: $color-white;
+  }
+  &__desc {
+    max-width: 480px;
+    margin: 0 auto $spacing-xl auto;
+    color: $color-white;
+    opacity: 0.9;
+    font-size: $font-size-base;
+    line-height: $line-height-base;
+    font-weight: $font-weight-medium;
+  }
+  &__btn {
+    margin-top: $spacing-md;
+    padding: $spacing-sm $spacing-xl;
+    font-size: $font-size-base;
+    background: color.scale($color-primary, $lightness: -8%) !important;
+    color: $color-white !important;
+    border-radius: $border-radius;
+    border: none;
+    box-shadow: $shadow-sm;
+    transition: background 0.2s, color 0.2s;
+    opacity: 1;
+    &:hover {
+      background: color.scale($color-primary, $lightness: -8%) !important;
+      color: $color-white !important;
+    }
+  }
+}
+
 // Адаптивность
 @media (max-width: 900px) {
   .hero__container {
     flex-direction: column;
-    gap: $spacing-xl;
+    gap: $spacing-xs;
     text-align: center;
   }
+  .hero__cta {
+    margin-bottom: $spacing-xs;
+  }
+  .hero__content {
+    margin-bottom: 0;
+  }
   .hero__image {
-    margin-top: $spacing-lg;
+    margin-top: 0;
   }
 }
 @media (max-width: 600px) {
+  .hero__container {
+    gap: $spacing-xs;
+  }
+  .hero__cta {
+    margin-bottom: $spacing-xs;
+  }
+  .hero__content {
+    margin-bottom: 0;
+    padding-top: $spacing-sm;
+    padding-bottom: $spacing-sm;
+    min-height: 0;
+  }
+  .hero__image {
+    margin-top: 0;
+  }
   .hero__title {
     font-size: $font-size-xl;
   }
@@ -308,6 +407,43 @@
   }
   .category-card__img,
   .product-card__img {
-    max-width: 100px;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    height: auto;
+  }
+  .visit-salons {
+    padding: $spacing-xl 0;
+    &__desc {
+      max-width: 100%;
+      font-size: $font-size-sm;
+    }
+    &__title {
+      font-size: $font-size-lg;
+    }
+    &__btn {
+      width: 100%;
+      font-size: $font-size-sm;
+      padding: calc($spacing-sm * 0.7) calc($spacing-xl * 0.7);
+    }
+    .featured .product-card {
+      max-width: 380px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+}
+@media (max-width: 480px) {
+  .hero__content {
+    padding-top: $spacing-xs;
+    padding-bottom: $spacing-xs;
+    min-height: 0;
+  }
+  .hero {
+    min-height: calc(100vh - 50px);
+    padding-top: $spacing-md;
+    padding-bottom: $spacing-md;
+  }
+  .featured .product-card {
+    max-width: 320px;
   }
 }

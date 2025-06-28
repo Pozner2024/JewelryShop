@@ -15,6 +15,7 @@ import {
   updatePageContent,
   getAllUsers,
   getAllPurchases,
+  getProductsByArticlePrefix,
 } from "../modules/db.js";
 
 const router = Router();
@@ -46,17 +47,64 @@ router.get("/", async (req, res) => {
 });
 router.get("/catalog", async (req, res) => {
   try {
+    const sort = req.query.sort || "popular";
+    const page = parseInt(req.query.page, 10) || 1;
+    const perPage = 6;
     const allProducts = await getAllProducts();
-    const products = allProducts.slice(0, 6); // Ограничиваем до 6 товаров
+    let products = [...allProducts];
     let likedProductIds = [];
     if (req.user) {
       likedProductIds = await getLikedProductIdsByUserId(req.user.id);
     }
-    const productsWithLikes = products.map((product) => ({
+    let productsWithLikes = products.map((product) => ({
       ...product,
       is_liked: likedProductIds.includes(product.id),
     }));
-    res.render("catalog", { products: productsWithLikes });
+
+    // Сортировка
+    switch (sort) {
+      case "price-asc":
+        productsWithLikes.sort((a, b) => a.price - b.price);
+        break;
+      case "price-desc":
+        productsWithLikes.sort((a, b) => b.price - a.price);
+        break;
+      case "name":
+        productsWithLikes.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case "new":
+        productsWithLikes.sort(
+          (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        );
+        break;
+      default:
+        break;
+    }
+
+    // Пагинация
+    const total = productsWithLikes.length;
+    const totalPages = Math.ceil(total / perPage);
+    const paginatedProducts = productsWithLikes.slice(
+      (page - 1) * perPage,
+      page * perPage
+    );
+
+    // Формируем массив страниц для шаблона
+    const pages = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push({ number: i, active: i === page });
+    }
+
+    res.render("catalog", {
+      products: paginatedProducts,
+      sort,
+      pages,
+      prevPage: page > 1 ? page - 1 : 1,
+      hasPrev: page > 1,
+      nextPage: page < totalPages ? page + 1 : totalPages,
+      hasNext: page < totalPages,
+      total,
+    });
   } catch (error) {
     console.error("Error fetching catalog products:", error);
     res.status(500).send("Error loading catalog.");
@@ -126,11 +174,11 @@ router.get("/product/:id", async (req, res) => {
     // Attempt to parse specifications, provide an empty object if it fails
     let specifications = {};
     try {
-      if (product.specifications) {
+      if (product.spec_json) {
         specifications =
-          typeof product.specifications === "string"
-            ? JSON.parse(product.specifications)
-            : product.specifications;
+          typeof product.spec_json === "string"
+            ? JSON.parse(product.spec_json)
+            : product.spec_json;
       }
     } catch (e) {
       console.error("Failed to parse product specifications:", e);
@@ -151,9 +199,14 @@ router.get("/product/:id", async (req, res) => {
       // Keep sizes as an empty array
     }
 
+    // Определяем, нужно ли показывать размеры
+    const showSizes =
+      product.category === "rings" || product.category === "bracelets";
     res.render("product", {
       product: { ...product, is_liked: isLiked, specifications, sizes },
       reviews,
+      isProductPage: true,
+      showSizes,
     });
   } catch (error) {
     console.error("Error fetching product:", error);
@@ -199,6 +252,203 @@ router.get("/profile", requireAuth, async (req, res) => {
     console.error("Error loading profile page:", error);
     res.status(500).send("Error loading profile page.");
   }
+});
+
+router.get("/catalog/rings", async (req, res) => {
+  const sort = req.query.sort || "popular";
+  const page = parseInt(req.query.page, 10) || 1;
+  const perPage = 6;
+  let products = await getProductsByArticlePrefix("RIN");
+
+  // Сортировка
+  switch (sort) {
+    case "price-asc":
+      products.sort((a, b) => a.price - b.price);
+      break;
+    case "price-desc":
+      products.sort((a, b) => b.price - a.price);
+      break;
+    case "name":
+      products.sort((a, b) => a.name.localeCompare(b.name));
+      break;
+    case "new":
+      products.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      break;
+    default:
+      break;
+  }
+
+  // Пагинация
+  const total = products.length;
+  const totalPages = Math.ceil(total / perPage);
+  const paginatedProducts = products.slice(
+    (page - 1) * perPage,
+    page * perPage
+  );
+
+  // Формируем массив страниц для шаблона
+  const pages = [];
+  for (let i = 1; i <= totalPages; i++) {
+    pages.push({ number: i, active: i === page });
+  }
+
+  res.render("rings", {
+    products: paginatedProducts,
+    sort,
+    pages,
+    prevPage: page > 1 ? page - 1 : 1,
+    hasPrev: page > 1,
+    nextPage: page < totalPages ? page + 1 : totalPages,
+    hasNext: page < totalPages,
+    total,
+  });
+});
+
+router.get("/catalog/necklaces", async (req, res) => {
+  const sort = req.query.sort || "popular";
+  const page = parseInt(req.query.page, 10) || 1;
+  const perPage = 6;
+  let products = await getProductsByArticlePrefix("NEC");
+
+  switch (sort) {
+    case "price-asc":
+      products.sort((a, b) => a.price - b.price);
+      break;
+    case "price-desc":
+      products.sort((a, b) => b.price - a.price);
+      break;
+    case "name":
+      products.sort((a, b) => a.name.localeCompare(b.name));
+      break;
+    case "new":
+      products.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      break;
+    default:
+      break;
+  }
+
+  // Пагинация
+  const total = products.length;
+  const totalPages = Math.ceil(total / perPage);
+  const paginatedProducts = products.slice(
+    (page - 1) * perPage,
+    page * perPage
+  );
+
+  // Формируем массив страниц для шаблона
+  const pages = [];
+  for (let i = 1; i <= totalPages; i++) {
+    pages.push({ number: i, active: i === page });
+  }
+
+  res.render("necklaces", {
+    products: paginatedProducts,
+    sort,
+    pages,
+    prevPage: page > 1 ? page - 1 : 1,
+    hasPrev: page > 1,
+    nextPage: page < totalPages ? page + 1 : totalPages,
+    hasNext: page < totalPages,
+    total,
+  });
+});
+
+router.get("/catalog/earrings", async (req, res) => {
+  const sort = req.query.sort || "popular";
+  const page = parseInt(req.query.page, 10) || 1;
+  const perPage = 6;
+  let products = await getProductsByArticlePrefix("EAR");
+
+  switch (sort) {
+    case "price-asc":
+      products.sort((a, b) => a.price - b.price);
+      break;
+    case "price-desc":
+      products.sort((a, b) => b.price - a.price);
+      break;
+    case "name":
+      products.sort((a, b) => a.name.localeCompare(b.name));
+      break;
+    case "new":
+      products.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      break;
+    default:
+      break;
+  }
+
+  // Пагинация
+  const total = products.length;
+  const totalPages = Math.ceil(total / perPage);
+  const paginatedProducts = products.slice(
+    (page - 1) * perPage,
+    page * perPage
+  );
+
+  // Формируем массив страниц для шаблона
+  const pages = [];
+  for (let i = 1; i <= totalPages; i++) {
+    pages.push({ number: i, active: i === page });
+  }
+
+  res.render("earrings", {
+    products: paginatedProducts,
+    sort,
+    pages,
+    prevPage: page > 1 ? page - 1 : 1,
+    hasPrev: page > 1,
+    nextPage: page < totalPages ? page + 1 : totalPages,
+    hasNext: page < totalPages,
+    total,
+  });
+});
+
+router.get("/catalog/bracelets", async (req, res) => {
+  const sort = req.query.sort || "popular";
+  const page = parseInt(req.query.page, 10) || 1;
+  const perPage = 6;
+  let products = await getProductsByArticlePrefix("BRA");
+
+  switch (sort) {
+    case "price-asc":
+      products.sort((a, b) => a.price - b.price);
+      break;
+    case "price-desc":
+      products.sort((a, b) => b.price - a.price);
+      break;
+    case "name":
+      products.sort((a, b) => a.name.localeCompare(b.name));
+      break;
+    case "new":
+      products.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      break;
+    default:
+      break;
+  }
+
+  // Пагинация
+  const total = products.length;
+  const totalPages = Math.ceil(total / perPage);
+  const paginatedProducts = products.slice(
+    (page - 1) * perPage,
+    page * perPage
+  );
+
+  // Формируем массив страниц для шаблона
+  const pages = [];
+  for (let i = 1; i <= totalPages; i++) {
+    pages.push({ number: i, active: i === page });
+  }
+
+  res.render("bracelets", {
+    products: paginatedProducts,
+    sort,
+    pages,
+    prevPage: page > 1 ? page - 1 : 1,
+    hasPrev: page > 1,
+    nextPage: page < totalPages ? page + 1 : totalPages,
+    hasNext: page < totalPages,
+    total,
+  });
 });
 
 export default router;
