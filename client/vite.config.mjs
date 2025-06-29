@@ -39,7 +39,9 @@ export default defineConfig({
         likes: resolve(__dirname, "scripts/likes.js"),
         product: resolve(__dirname, "scripts/product.js"),
         profile: resolve(__dirname, "scripts/profile.js"),
-        // index: resolve(__dirname, "index.html"), // можно оставить для dev-сервера
+        index: resolve(__dirname, "index.html"),
+        navigation: resolve(__dirname, "scripts/navigation.js"),
+        search: resolve(__dirname, "scripts/search.js"),
       },
       output: {
         // Добавляем content-hash в имена файлов для корректного кеширования

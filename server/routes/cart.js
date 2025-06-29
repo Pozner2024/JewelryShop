@@ -18,6 +18,7 @@ router.use(requireAuth);
 router.get("/", async (req, res) => {
   try {
     const cartItems = await getCartItems(req.user.id);
+    res.set("Cache-Control", "no-store");
     res.json({ success: true, cart: cartItems });
   } catch (error) {
     console.error("Error fetching cart items:", error);

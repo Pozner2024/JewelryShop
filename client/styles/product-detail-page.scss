@@ -26,7 +26,7 @@
     max-width: 420px;
     background: $color-white;
     border-radius: $border-radius-lg;
-    box-shadow: $shadow-sm;
+    box-shadow: $shadow-xl;
     padding: $spacing-xl;
     display: flex;
     flex-direction: column;
@@ -38,7 +38,7 @@
     min-width: 320px;
     background: $color-white;
     border-radius: $border-radius-lg;
-    box-shadow: $shadow-sm;
+    box-shadow: $shadow-xl;
     padding: $spacing-xl;
     display: flex;
     flex-direction: column;
@@ -50,7 +50,7 @@
     margin: $spacing-xxl auto 0 auto;
     background: $color-white;
     border-radius: $border-radius-lg;
-    box-shadow: $shadow-sm;
+    box-shadow: $shadow-xl;
     padding: $spacing-xl;
   }
 }
@@ -67,7 +67,7 @@
       height: 100%;
       object-fit: cover;
       border-radius: $border-radius;
-      box-shadow: $shadow-md;
+      box-shadow: $shadow-xxl;
     }
     .product-gallery__wishlist {
       position: absolute;
@@ -142,6 +142,10 @@
     align-items: baseline;
     gap: $spacing-md;
     margin-bottom: $spacing-md;
+    background: $color-white;
+    border-radius: $border-radius;
+    box-shadow: $shadow-md;
+    padding: $spacing-sm $spacing-md;
     .product-info__price {
       font-size: $font-size-xl;
       font-weight: $font-weight-bold;
@@ -230,6 +234,10 @@
     display: flex;
     gap: $spacing-md;
     margin-bottom: $spacing-md;
+    background: $color-white;
+    border-radius: $border-radius;
+    box-shadow: $shadow-md;
+    padding: $spacing-sm $spacing-md;
     .button {
       min-width: 140px;
     }
@@ -287,10 +295,11 @@
 }
 
 .review {
-  background: $color-gray-light;
-  border-radius: $border-radius;
+  background: $color-white;
+  border-radius: $border-radius-lg;
   padding: $spacing-md;
   margin-bottom: $spacing-md;
+  box-shadow: $shadow-md;
   .review__author {
     font-weight: $font-weight-bold;
     color: $color-primary;
