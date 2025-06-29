@@ -221,7 +221,6 @@ window.showEditProductModal = function (product) {
     // Сохраняем массив в window для drag&drop, всегда длиной 4
     window._editImages = images.slice(0, 4);
     while (window._editImages.length < 4) window._editImages.push(null);
-    console.log("editImages", window._editImages);
     if (form.existing_images) {
       form.existing_images.value = JSON.stringify(window._editImages);
     }
@@ -229,7 +228,6 @@ window.showEditProductModal = function (product) {
       preview.innerHTML = "";
       for (let idx = 0; idx < 4; idx++) {
         const url = window._editImages[idx];
-        console.log("rendering image", url);
         const item = document.createElement("div");
         item.className = "image-preview__item";
         item.draggable = true;
@@ -263,7 +261,6 @@ window.showEditProductModal = function (product) {
           const img = document.createElement("img");
           img.src = url;
           item.appendChild(img);
-          console.log("appended image", img.src);
           // Кнопка удаления
           const btn = document.createElement("button");
           btn.type = "button";

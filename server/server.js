@@ -42,9 +42,7 @@ const hbs = exphbs.create({
   defaultLayout: "main",
   layoutsDir: layoutsPath,
   partialsDir: partialsPath,
-  helpers: {
-    ...helpers,
-  },
+  helpers,
 });
 
 webserver.engine(".hbs", hbs.engine);

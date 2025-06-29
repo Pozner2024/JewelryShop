@@ -4,7 +4,7 @@
 .vscode/
 *.code-workspace
 **/_server.log
-**/uploads
+# **/uploads
 _nodemon.log
 nginx_caches/
 .env

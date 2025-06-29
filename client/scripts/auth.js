@@ -23,9 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Обработчик выпадающего меню профиля ---
   if (profileDropdownBtn) {
-    console.log("Навешиваю обработчик на profileDropdownBtn");
     profileDropdownBtn.addEventListener("click", (event) => {
-      console.log("Клик по иконке профиля!");
       event.stopPropagation();
       profileDropdown.classList.toggle("show");
     });
