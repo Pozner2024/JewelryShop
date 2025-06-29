@@ -20,9 +20,22 @@
       </ul>
     </nav>
     <div class="header__actions">
-      <button class="header__search-btn">
-        <img src="/images/search-icon.svg" alt="Search" class="header__icon" />
-      </button>
+      <div class="header__search">
+        <button class="header__search-btn" type="button">
+          <img
+            src="/images/search-icon.svg"
+            alt="Search"
+            class="header__icon"
+          />
+        </button>
+        <form class="header__search-form">
+          <input
+            type="text"
+            class="header__search-input"
+            placeholder="Search..."
+          />
+        </form>
+      </div>
       <a href="/cart" class="header__cart-btn">
         <img src="/images/cart-icon.svg" alt="Cart" class="header__icon" />
         <span class="header__cart-count">0</span>

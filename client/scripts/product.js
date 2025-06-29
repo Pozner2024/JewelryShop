@@ -51,3 +51,45 @@ tabButtons.forEach((btn) => {
       .classList.add("tabs__panel--active");
   });
 });
+
+// --- Lightbox Gallery ---
+(function () {
+  // Собираем все изображения галереи
+  const mainImg = document.getElementById("mainProductImage");
+  const thumbImgs = Array.from(
+    document.querySelectorAll(".product-gallery__thumb-img")
+  );
+  // Массив ссылок на изображения (главное + миниатюры)
+  const galleryImages = [mainImg ? mainImg.src : ""].concat(
+    thumbImgs.map((img) => img.src)
+  );
+  let currentGalleryIndex = 0;
+
+  window.openGallery = function (idx) {
+    currentGalleryIndex = idx;
+    document.getElementById("galleryModal").style.display = "flex";
+    document.getElementById("galleryModalImg").src = galleryImages[idx];
+  };
+  window.closeGallery = function () {
+    document.getElementById("galleryModal").style.display = "none";
+  };
+  window.prevGalleryImg = function () {
+    currentGalleryIndex =
+      (currentGalleryIndex - 1 + galleryImages.length) % galleryImages.length;
+    document.getElementById("galleryModalImg").src =
+      galleryImages[currentGalleryIndex];
+  };
+  window.nextGalleryImg = function () {
+    currentGalleryIndex = (currentGalleryIndex + 1) % galleryImages.length;
+    document.getElementById("galleryModalImg").src =
+      galleryImages[currentGalleryIndex];
+  };
+  document.addEventListener("keydown", function (e) {
+    const modal = document.getElementById("galleryModal");
+    if (modal && modal.style.display !== "none") {
+      if (e.key === "Escape") closeGallery();
+      if (e.key === "ArrowLeft") prevGalleryImg();
+      if (e.key === "ArrowRight") nextGalleryImg();
+    }
+  });
+})();

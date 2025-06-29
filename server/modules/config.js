@@ -93,3 +93,106 @@ export const sessionConfig = {
     secure: process.env.NODE_ENV === "production",
   },
 };
+
+// --- STOP WORDS AND SEARCH TEXT GENERATION ---
+const EN_STOP_WORDS = new Set([
+  "a",
+  "an",
+  "the",
+  "and",
+  "or",
+  "but",
+  "if",
+  "then",
+  "else",
+  "when",
+  "at",
+  "by",
+  "for",
+  "with",
+  "about",
+  "against",
+  "between",
+  "into",
+  "through",
+  "during",
+  "before",
+  "after",
+  "above",
+  "below",
+  "to",
+  "from",
+  "up",
+  "down",
+  "in",
+  "out",
+  "on",
+  "off",
+  "over",
+  "under",
+  "again",
+  "further",
+  "then",
+  "once",
+  "here",
+  "there",
+  "all",
+  "any",
+  "both",
+  "each",
+  "few",
+  "more",
+  "most",
+  "other",
+  "some",
+  "such",
+  "no",
+  "nor",
+  "not",
+  "only",
+  "own",
+  "same",
+  "so",
+  "than",
+  "too",
+  "very",
+  "can",
+  "will",
+  "just",
+  "don",
+  "should",
+  "now",
+  "is",
+  "are",
+  "was",
+  "were",
+  "be",
+  "been",
+  "being",
+  "have",
+  "has",
+  "had",
+  "do",
+  "does",
+  "did",
+  "having",
+  "of",
+]);
+
+function stripHtmlTags(str) {
+  return str ? str.replace(/<[^>]*>/g, " ") : "";
+}
+
+function makeSearchText({ name, brand, description, category, article }) {
+  // Объединяем все важные поля
+  let text = `${name || ""} ${brand || ""} ${description || ""} ${
+    category || ""
+  } ${article || ""}`;
+  text = stripHtmlTags(text).toLowerCase();
+  // Удаляем стоп-слова
+  text = text
+    .split(/\W+/)
+    .filter((word) => word && !EN_STOP_WORDS.has(word))
+    .join(" ");
+  return text;
+}

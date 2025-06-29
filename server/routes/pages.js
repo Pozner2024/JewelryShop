@@ -18,6 +18,7 @@ import {
   getProductsByArticlePrefix,
   getProductsByCategory,
   getAllCategories,
+  getDbPool,
 } from "../modules/db.js";
 
 const router = Router();
@@ -468,6 +469,24 @@ router.get("/catalog/bracelets", async (req, res) => {
     hasNext: page < totalPages,
     total,
   });
+});
+
+// --- AUTOCOMPLETE ENDPOINT ---
+router.get("/api/autocomplete", async (req, res) => {
+  const q = (req.query.q || "").toLowerCase().trim();
+  if (!q || q.length < 2) return res.json([]);
+  try {
+    const pool = getDbPool();
+    // Ищем по названию и search_text, возвращаем только name и id
+    const [rows] = await pool.query(
+      `SELECT id, name FROM products WHERE name LIKE CONCAT('%', ?, '%') OR search_text LIKE CONCAT('%', ?, '%') LIMIT 7`,
+      [q, q]
+    );
+    res.json(rows);
+  } catch (e) {
+    console.error("Autocomplete error:", e);
+    res.status(500).json([]);
+  }
 });
 
 export default router;

@@ -500,6 +500,109 @@ export async function getProductsByArticlePrefix(prefix) {
   return rows;
 }
 
+// --- STOP WORDS AND SEARCH TEXT GENERATION ---
+const EN_STOP_WORDS = new Set([
+  "a",
+  "an",
+  "the",
+  "and",
+  "or",
+  "but",
+  "if",
+  "then",
+  "else",
+  "when",
+  "at",
+  "by",
+  "for",
+  "with",
+  "about",
+  "against",
+  "between",
+  "into",
+  "through",
+  "during",
+  "before",
+  "after",
+  "above",
+  "below",
+  "to",
+  "from",
+  "up",
+  "down",
+  "in",
+  "out",
+  "on",
+  "off",
+  "over",
+  "under",
+  "again",
+  "further",
+  "then",
+  "once",
+  "here",
+  "there",
+  "all",
+  "any",
+  "both",
+  "each",
+  "few",
+  "more",
+  "most",
+  "other",
+  "some",
+  "such",
+  "no",
+  "nor",
+  "not",
+  "only",
+  "own",
+  "same",
+  "so",
+  "than",
+  "too",
+  "very",
+  "can",
+  "will",
+  "just",
+  "don",
+  "should",
+  "now",
+  "is",
+  "are",
+  "was",
+  "were",
+  "be",
+  "been",
+  "being",
+  "have",
+  "has",
+  "had",
+  "do",
+  "does",
+  "did",
+  "having",
+  "of",
+]);
+
+function stripHtmlTags(str) {
+  return str ? str.replace(/<[^>]*>/g, " ") : "";
+}
+
+function makeSearchText({ name, brand, description, category, article }) {
+  // Объединяем все важные поля
+  let text = `${name || ""} ${brand || ""} ${description || ""} ${
+    category || ""
+  } ${article || ""}`;
+  text = stripHtmlTags(text).toLowerCase();
+  // Удаляем стоп-слова
+  text = text
+    .split(/\W+/)
+    .filter((word) => word && !EN_STOP_WORDS.has(word))
+    .join(" ");
+  return text;
+}
+
 export async function addProduct({
   name,
   price,
@@ -512,7 +615,14 @@ export async function addProduct({
   images,
 }) {
   const pool = await getPool();
-  const sql = `INSERT INTO products (name, price, old_price, brand, article, category, description, spec_json, images) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  const search_text = makeSearchText({
+    name,
+    brand,
+    description,
+    category,
+    article,
+  });
+  const sql = `INSERT INTO products (name, price, old_price, brand, article, category, description, spec_json, images, search_text) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
   const [result] = await pool.query(sql, [
     name,
     price,
@@ -523,6 +633,7 @@ export async function addProduct({
     description || null,
     spec_json || null,
     images || null,
+    search_text,
   ]);
   return result.insertId;
 }
@@ -542,6 +653,13 @@ export async function updateProduct(
   }
 ) {
   const pool = await getPool();
+  const search_text = makeSearchText({
+    name,
+    brand,
+    description,
+    category,
+    article,
+  });
   const fields = [
     "name = ?",
     "price = ?",
@@ -552,6 +670,7 @@ export async function updateProduct(
     "description = ?",
     "spec_json = ?",
     "images = ?",
+    "search_text = ?",
   ];
   const values = [
     name,
@@ -563,8 +682,9 @@ export async function updateProduct(
     description || null,
     spec_json || null,
     images || "[]",
+    search_text,
+    id,
   ];
-  values.push(id);
   const sql = `UPDATE products SET ${fields.join(", ")} WHERE id = ?`;
   await pool.query(sql, values);
 }

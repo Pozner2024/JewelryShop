@@ -56,6 +56,7 @@ const helpers = {
     return a === b;
   },
   gt(a, b, options) {
+    // Блочный хелпер (оставляем для совместимости)
     const aNum = Number(a);
     const bNum = Number(b);
     if (!isNaN(aNum) && !isNaN(bNum) && aNum > bNum) {
@@ -64,12 +65,26 @@ const helpers = {
     return options.inverse(this);
   },
   lt(a, b, options) {
+    // Блочный хелпер (оставляем для совместимости)
     const aNum = Number(a);
     const bNum = Number(b);
     if (!isNaN(aNum) && !isNaN(bNum) && aNum < bNum) {
       return options.fn(this);
     }
     return options.inverse(this);
+  },
+  // Обычные (inline) сравнения для шаблонов
+  gt_inline(a, b) {
+    const aNum = Number(a);
+    const bNum = Number(b);
+    if (isNaN(aNum) || isNaN(bNum)) return false;
+    return aNum > bNum;
+  },
+  lt_inline(a, b) {
+    const aNum = Number(a);
+    const bNum = Number(b);
+    if (isNaN(aNum) || isNaN(bNum)) return false;
+    return aNum < bNum;
   },
 
   // Форматирование и утилиты
@@ -137,6 +152,12 @@ const helpers = {
   objectEntries: function (obj) {
     if (!obj || typeof obj !== "object") return [];
     return Object.entries(obj);
+  },
+  // Логический И для inline-выражений
+  and() {
+    // arguments — псевдомассив, последний аргумент — options
+    const args = Array.prototype.slice.call(arguments, 0, -1);
+    return args.every(Boolean);
   },
 };
 

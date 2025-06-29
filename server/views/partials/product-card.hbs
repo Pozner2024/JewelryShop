@@ -33,6 +33,9 @@
             {{#if this.old_price}}
             <p class="product-card__old-price">${{this.old_price}}</p>
             {{/if}}
+            {{#if (and this.quantity (lte this.quantity 10) (gt_inline this.quantity 0))}}
+            <p class="product-card__stock-alert">Act fast! Only {{this.quantity}} piece{{#if (eq this.quantity 1)}}{{else}}s{{/if}} left.</p>
+            {{/if}}
         </div>
         {{!-- Блок рейтинга (пока пустой, для будущей реализации) --}}
         <div class="product-card__rating">

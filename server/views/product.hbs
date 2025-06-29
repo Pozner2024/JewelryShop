@@ -21,6 +21,7 @@
               src="{{getFirstImage product.images}}"
               alt="{{product.name}}"
               class="product-gallery__img"
+              onclick="openGallery(0)"
             />
             <button class="product-gallery__wishlist product-card__wishlist {{#if product.is_liked}}liked{{/if}}" title="Add to wishlist">
               <img
@@ -32,7 +33,7 @@
           </div>
           <div class="product-gallery__thumbs">
             {{#each (parseImages product.images)}}
-              <div class="product-gallery__thumb" onclick="setMainImage('{{this}}')">
+              <div class="product-gallery__thumb" onclick="openGallery({{@index}})">
                 <img src="{{this}}" alt="{{../product.name}}" class="product-gallery__thumb-img" />
               </div>
             {{/each}}
@@ -46,9 +47,12 @@
           <span class="product-info__article">Art. {{product.article}}</span>
         </div>
         <div class="product-info__price-block">
-          <span class="product-info__price">${{divide product.price 10}}</span>
+          <span class="product-info__price">${{product.price}}</span>
           {{#if product.old_price}}
-          <span class="product-info__old-price">${{divide product.old_price 10}}</span>
+          <span class="product-info__old-price">${{product.old_price}}</span>
+          {{/if}}
+          {{#if (and product.quantity (lte product.quantity 10) (gt_inline product.quantity 0))}}
+          <p class="product-info__stock-alert">Act fast! Only {{product.quantity}} piece{{#if (eq product.quantity 1)}}{{else}}s{{/if}} left.</p>
           {{/if}}
         </div>
         <div class="product-info__rating">
@@ -154,3 +158,12 @@
     </div>
   </section>
 </main>
+<!-- Lightbox modal -->
+<div id="galleryModal" class="gallery-modal" style="display:none;">
+  <span class="gallery-modal__close" onclick="closeGallery()">&times;</span>
+  <img class="gallery-modal__img" id="galleryModalImg" src="" alt="">
+  <div class="gallery-modal__nav">
+    <button type="button" onclick="prevGalleryImg()">&#8592;</button>
+    <button type="button" onclick="nextGalleryImg()">&#8594;</button>
+  </div>
+</div>
