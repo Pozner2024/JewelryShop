@@ -17,6 +17,14 @@ BACKUP_DIR="/var/backups/jewelryshop"
 DATE=$(date +"%Y-%m-%d_%H-%M-%S")
 DB_NAME="jewelryshop"  
 
+# остановка скрипта при ошибке
+set -e
+
+# Подгружаем переменные окружения
+set -a
+source /home/deploy/JewelryShop/server/.env
+set +a
+
 # === 1. Остановить приложение ===
 pm2 stop $APP_NAME
 
@@ -38,7 +46,7 @@ tar czf "$BACKUP_DIR/files_backup_$DATE.tar.gz" \
     "$PROJECT_DIR/server/routes"
 
 # === 5. Бэкап MariaDB ===
-mysqldump -u <user> -p<password> "$DB_NAME" > "$BACKUP_DIR/mariadb_backup_$DATE.sql"
+mysqldump -u "$DB_USER" -p"$DB_PASSWORD" "$DB_NAME" > "$BACKUP_DIR/mariadb_backup_$DATE.sql"
 
 # === 6. Перезапустить приложение ===
 pm2 start server/server.js --name $APP_NAME
