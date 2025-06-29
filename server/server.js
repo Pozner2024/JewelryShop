@@ -56,6 +56,12 @@ webserver.use(sassMiddleware);
 const clientPublicDir = path.join(CLIENT_DIR, "public");
 webserver.use(express.static(clientPublicDir));
 
+// Раздача ассетов Vite из dist/assets по пути /assets
+webserver.use(
+  "/assets",
+  express.static(path.join(CLIENT_DIR, "dist", "assets"))
+);
+
 // Раздача изображений из client/images по пути /images
 webserver.use("/images", express.static(path.join(CLIENT_DIR, "images")));
 
